@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+				minWidth="100" height="50"
+				width="{txtGroup.width}"
+				autoDrawBackground="false"
+				stateChangeComplete="stateChangeCompleteHandler(event)"
+				creationComplete="init(event)"
+				enabled="{MainConfig.getInstance.userModel.Rolls(data.role)}"
+				>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.events.SandboxMouseEvent;
+			import mx.utils.ObjectUtil;
+			
+			import spark.events.IndexChangeEvent;
+			
+			import th.co.tomato.main.MainConfig;
+			import th.co.tomato.themes.FlatTheme;
+			private var chk:Boolean = false;
+			
+			[Bindable]
+			private var isAdmin:Boolean = false;
+			protected function init(event:FlexEvent):void
+			{
+				systemManager.getSandboxRoot().addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+				systemManager.getSandboxRoot().addEventListener(SandboxMouseEvent.MOUSE_DOWN_SOMEWHERE, onMouseDown);
+				validateDisplayList();
+				trace(ObjectUtil.toString(data));
+			}
+			
+			protected function onMouseDown(event:Event):void
+			{				
+				var idd:String = '';
+				if(Object(event.target).hasOwnProperty('id')){
+					idd = Object(event.target).id;
+				}
+				
+				if(event.target == txtGroup || event.target == this || idd == "itemGroup" ||  idd == "thumb" ){
+					trace('onMouseDown =');
+					
+				} else {
+					trace('onMouseDown  !=',currentState);
+					if(currentState != 'normal'){
+						currentState='normal';
+						chk = false;
+						validateDisplayList();
+						trace('after change= ',currentState);
+					}
+				}
+			}
+			
+			
+			
+			protected function stateChangeCompleteHandler(event:FlexEvent):void
+			{
+				if(currentState == "normal"){
+					chk = false;
+				}
+				
+				
+			}
+			
+			override protected function commitProperties():void
+			{
+				super.commitProperties();
+				
+				if(currentState == "normal"){
+					chk = false;
+				}
+			}
+			
+			override public function set data(value:Object):void
+			{
+				// TODO Auto Generated method stub
+				super.data = value;
+				if(value != null){
+					trace(ObjectUtil.toString(value));
+					trace( ObjectUtil.toString(MainConfig.getInstance.userModel.Rolls('Admin') ));
+				}
+			}
+			
+			
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
+	</s:states>
+	<s:HGroup height="50" horizontalAlign="center" paddingLeft="10" paddingRight="10" id="txtGroup"
+			  verticalAlign="middle"
+			  horizontalCenter="0" verticalCenter="0">
+	<s:RichText fontFamily="myiconfont" fontSize="16" tabStops="S0 S50" fontSize.normal="16"
+				text="{data.image1}" color="#ffffff" />
+	<s:RichText  fontFamily="Arial" fontSize="14" tabStops="S0 S50" id="txt1"
+				text="{data.text1}" color="#ffffff" />
+	</s:HGroup>
+	
+	<s:Rect x="0" width="100%"
+			y="0" height="50" alpha.hovered="0.3"
+			alpha.normal="0"
+			alpha.selected="0.2">
+		<s:fill>
+			<s:SolidColor color.normal="{FlatTheme.upColor}" color.hovered="{FlatTheme.overColor}" color.selected="{FlatTheme.selectColor}" />
+		</s:fill>
+	</s:Rect>
+	
+</s:ItemRenderer>

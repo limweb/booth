@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				   xmlns:s="library://ns.adobe.com/flex/spark"
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:depositslipservice="services.depositslipservice.*"
+				   width="100%" height="100%" creationComplete="init()">
+	<s:layout>
+		<s:VerticalLayout paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10"/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			
+			import spark.events.IndexChangeEvent;
+			
+			import th.co.tomato.utils.MessageAlert;
+			
+			
+			[Bindable]
+			private var depositAc:ArrayCollection	= new ArrayCollection();
+			
+			protected function lblfmt(item:Object, column:GridColumn):String
+			{
+				return nft.format(item[column.dataField]);
+			}
+			
+			protected function numbersort(obj1:Object, obj2:Object, column:GridColumn):int
+			{
+				var num:Number = parseFloat(obj1[column.dataField]) - parseFloat(obj2[column.dataField]);
+				return (num > 0) ? 1 : ((num < 0) ? -1 : 0);
+			}
+			
+			protected function init():void
+			{
+				getApplog(null);
+				scr1.addEventListener(MouseEvent.MOUSE_WHEEL,
+					function scroller1_mouseWheelHandler(event:MouseEvent):void{
+						//calculate the new position 
+						vgMain.verticalScrollPosition+=(event.delta*-20);            
+						//stop the event’s bubbling
+						event.stopPropagation();
+					}
+					,true);
+			}
+			
+			
+			protected function getApplog(search:Object):void
+			{
+				getApplogResult.token = depositslipService.getApplog(search);
+			}
+			
+			protected function getApplogResult_resultHandler(event:ResultEvent):void
+			{
+				depositAc = event.result as ArrayCollection;
+			}
+			
+			protected function searchapplog(event:MouseEvent):void
+			{
+				var o:Object = new Object();
+				o.sdate = sdate.text;
+				o.tdate = tdate.text;
+				if(o.sdate != '' && o.tdate == '' ){ 
+					o.tdate = o.sdate; 
+					tdate.selectedDate = sdate.selectedDate;
+				} else if( o.sdate == '' && o.tdate != '' ){ 
+					o.sdate = o.tdate; 
+					sdate.selectedDate = tdate.selectedDate;
+				} else if( o.sdate == '' && o.tdate == ''){
+//					MessageAlert.getWarningAlert('Please Select Date for Search');
+					getApplog(null);
+				} else {
+					if(tdate.selectedDate < sdate.selectedDate){
+						MessageAlert.getWarningAlert('Tdate > SDate');	
+					} else {
+						trace('search');	
+						getApplog(o);
+					}
+				}
+			}
+			
+			protected function searchDepositeList(event:MouseEvent):void
+			{
+				btnprn.visible = false;
+				var date:String = list.selectedItems[0].datesearch;
+				getLogbydateResult.token = depositslipService.getLogbydate(date);
+								
+			}
+			
+			[Bindable]
+			private var depo:Object = new Object();
+			[Bindable] private var acdepo:ArrayCollection = new ArrayCollection();
+			[Bindable] private var acdepouser:ArrayCollection = new ArrayCollection();
+			
+			protected function getLogbydateResult_resultHandler(event:ResultEvent):void
+			{
+					depo = event.result as Object;
+					acdepo = new ArrayCollection(depo.deposlit);
+					acdepouser =   new ArrayCollection(depo.user);
+					var item:Object = new Object();
+					item.id = 9999999;
+					item.app_id = depo.app.id;
+					item.amtcash = depo.app.sumcash;
+					item.debitamt = depo.app.sumdebit;
+					item.ccamt = depo.app.sumcc;
+					item.chkamt = depo.app.sumchk;
+					item.sum = depo.app.sumtotal;
+					item.userid = 99999999;
+					item.uname = 'Total:';
+					acdepouser.addItem(item);
+					btnprn.visible = true;
+					
+			}
+			
+			[Bindable]
+			private var _widths:Number;
+
+			private function get widths():Number {
+				if(dgDeposit.width <  dgUsers.width ) {
+					return dgUsers.width;
+				} else {
+					return dgDeposit.width;
+				}
+			}
+			
+			private var titleWin:Pdfview;
+			protected function printpdf(event:MouseEvent):void
+			{
+				if(list.selectedItems.length>0 && list.selectedItems[0].datesearch){
+					titleWin = PopUpManager.createPopUp(this,Pdfview,true) as Pdfview;
+					titleWin.pdfdate = list.selectedItems[0].datesearch;
+					titleWin.width = screen.width * .95 ;
+					titleWin.height = screen.height *.95 ;
+					titleWin.x = 0; 
+					titleWin.y = 0;
+					PopUpManager.centerPopUp(titleWin);	
+				} else  {
+					MessageAlert.getWarningAlert('Please Select Item to Search');
+				}
+				
+			}
+			
+			protected function list_changingHandler(event:IndexChangeEvent):void
+			{
+				btnprn.visible = true;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<mx:CurrencyFormatter id="nft" precision="2" currencySymbol="$"  />
+		<s:CallResponder id="getApplogResult" result="getApplogResult_resultHandler(event)"/>
+		<depositslipservice:DepositslipService id="depositslipService"
+											   fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+											   showBusyCursor="true"/>
+		<s:CallResponder id="getLogbydateResult" result="getLogbydateResult_resultHandler(event)"/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:HGroup width="100%" height="31" horizontalAlign="left" verticalAlign="middle">
+		<s:Label text="Deposit List" fontWeight="bold" fontSize="20" />
+		<s:Spacer width="20" />
+		<s:Label text="Date:" />
+		<mx:DateField width="120" formatString="YYYY-MM-DD" showToday="true" yearNavigationEnabled="true" id="sdate" />
+		<s:Label text="Date:" />
+		<mx:DateField width="120" formatString="YYYY-MM-DD" showToday="true" yearNavigationEnabled="true" id="tdate" />
+		<s:Button label="Search" click="searchapplog(event)" />
+		<s:Button label="Print PDF" click="printpdf(event)" id="btnprn" visible="false" />
+	</s:HGroup>
+		<s:HGroup width="100%" height="100%">
+			<s:BorderContainer width="144" height="100%" >
+				<s:layout>
+					<s:VerticalLayout />
+				</s:layout>
+				<s:Label text="Deposite List" />
+				<s:List width="100%" height="100%"  dataProvider="{depositAc}" labelField="datesearch" 
+						doubleClickEnabled="true" id="list"
+						doubleClick="searchDepositeList(event)"
+						changing="list_changingHandler(event)"
+						/>
+			</s:BorderContainer>
+			<s:Scroller width="100%" height="100%" id="scr1">
+				<s:VGroup width="100%" height="100%" id="vgMain">
+					<mx:HBox width="100%">
+						<s:CheckBox label="Sale" id="chkuser"  />
+						<s:CheckBox label="Vendor" id="chkven" />
+						<s:CheckBox label="Check" id="chkcheck"/>
+						<s:CheckBox label="etc"  id="chketc" />
+					</mx:HBox>
+					<s:DataGrid id="dgDeposit" dataProvider="{acdepo}" height="{dgDeposit.dataProvider.length* 30 + 60}" verticalScrollPolicy="off" width="{widths}" >
+						<s:columns>
+							<s:ArrayList>
+								<s:GridColumn dataField="NRCID" headerText="New ReptID" width="120" id="colnrcid" sortCompareFunction="numbersort" ></s:GridColumn>
+								<s:GridColumn dataField="RecID" headerText="Rept Id" width="120" ></s:GridColumn>
+								<s:GridColumn dataField="VID" headerText="Vendor ID" width="100"></s:GridColumn>
+								<s:GridColumn dataField="VName" headerText="Vendor Name" visible="{chkven.selected}" ></s:GridColumn>
+								<s:GridColumn dataField="CASHAMT" headerText="Cash Amt" id="colcashamt" width="100" labelFunction="lblfmt"></s:GridColumn>
+								<s:GridColumn dataField="CHECKAMT" headerText="CHECK Amt" id="colchkamt" width="100" sortCompareFunction="numbersort" ></s:GridColumn>
+								<s:GridColumn dataField="CHECKNO" headerText="Check #" width="150" id="colcheckno" visible="{chkcheck.selected}"></s:GridColumn>
+								<s:GridColumn dataField="CHECK" headerText="check" visible="{chkcheck.selected}"></s:GridColumn>
+								<s:GridColumn dataField="CCAMT"  headerText="CC Amt" width="100" id="colccamt"   labelFunction="lblfmt" sortCompareFunction="numbersort"></s:GridColumn>
+								<s:GridColumn dataField="DEBITAMT" headerText="Debit Amt" width="100" id="coldebitamt" labelFunction="lblfmt" sortCompareFunction="numbersort"></s:GridColumn>
+								<s:GridColumn dataField="GrandTotal"  headerText="Total Amount" width="120" id="coltotalamt"  labelFunction="lblfmt" sortCompareFunction="numbersort"></s:GridColumn>
+								<s:GridColumn dataField="UID" width="50" headerText="UID" visible="{chkuser.selected}"></s:GridColumn>
+								<s:GridColumn dataField="Uname" width="150" headerText="UName" visible="{chkuser.selected}"></s:GridColumn>
+								<s:GridColumn dataField="id" width="50" headerText="id" visible="{chketc.selected}"></s:GridColumn>
+								<s:GridColumn dataField="MODEID"  width="120" headerText="modeid" visible="{chketc.selected}"></s:GridColumn>
+								<s:GridColumn dataField="PAYMODE"  width="120" headerText="paymode" visible="{chketc.selected}"></s:GridColumn>
+								<s:GridColumn dataField="Debit" width="120" headerText="debit" visible="{chketc.selected}"></s:GridColumn>
+								<s:GridColumn dataField="PAYID" width="120" headerText="payid" visible="{chketc.selected}"></s:GridColumn>
+								<s:GridColumn dataField="app_id" width="120"  headerText="app_id" visible="{chketc.selected}"></s:GridColumn>
+								
+							</s:ArrayList>
+						</s:columns>
+					</s:DataGrid>
+					<s:DataGrid id="dgUsers" width="100%" dataProvider="{acdepouser}" >
+						<s:columns>
+							<s:ArrayList>
+								<s:GridColumn dataField="userid" headerText="UID"></s:GridColumn>
+								<s:GridColumn dataField="uname" headerText="Name"></s:GridColumn>
+								<s:GridColumn dataField="amtcash" headerText="Cash Amt" labelFunction="lblfmt" id="colcash"  width="150" ></s:GridColumn>
+								<s:GridColumn dataField="chkamt" headerText="CHK Amt" labelFunction="lblfmt" id="colchk" width="150" ></s:GridColumn>
+								<s:GridColumn dataField="ccamt" headerText="CC Amt" labelFunction="lblfmt" id="colcc" width="150"></s:GridColumn>
+								<s:GridColumn dataField="debitamt" headerText="Debit Amt" labelFunction="lblfmt" id="coldebit" width="150"></s:GridColumn>
+								<s:GridColumn dataField="sum" headerText="SUM Total" labelFunction="lblfmt" id="colsum" width="200"></s:GridColumn>
+							</s:ArrayList>
+						</s:columns>
+					</s:DataGrid>
+				</s:VGroup>
+			</s:Scroller>
+		</s:HGroup>
+</s:BorderContainer>

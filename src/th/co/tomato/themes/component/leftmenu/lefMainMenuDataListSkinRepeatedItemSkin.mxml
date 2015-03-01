@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+				width="200" 
+				height="50" 
+				autoDrawBackground="false" 
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				stateChangeComplete="itemrenderer1_stateChangeCompleteHandler(event)"
+				>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.EffectEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			import th.co.tomato.themes.FlatTheme;
+			[Bindable] private var chk:Boolean = false;
+			
+			private var _chkDisp:Boolean;
+			[Bindable] private var maxwidth:Number = 200; 
+			[Bindable] private var prosition:Number = 160;
+			
+			[Bindable] private var AcDetail:ArrayCollection = new ArrayCollection();
+			
+			
+			[Bindable]
+			public function get chkDisp():Boolean
+			{
+				if(data.A == "Main"){
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			public function set chkDisp(value:Boolean):void
+			{
+				_chkDisp = value;
+			}
+
+			protected function group1_clickHandler(event:MouseEvent):void
+			{
+			  if(currentState == "selected"){
+						if(chk){
+							this.height = 50;
+						} else {
+							this.height = detailList.dataProvider.length * 40 + 50;
+						}
+						chk = !chk;
+			  }
+			  detailList.selectedItem = null;
+			}
+			
+			
+			override protected function commitProperties():void
+			{
+				super.commitProperties();
+				
+				if(this.width < maxwidth  && currentState == "selected"){
+					this.height = 50;
+				} else if(currentState != "selected"){
+				
+					this.height = 50;
+					pop.includeInLayout = false;
+				} 
+				validateProperties();
+				validateSize();
+				validateDisplayList();
+			}
+			
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				if(data.children.length > 0 ){
+					AcDetail = data.children;
+				}
+			}
+			
+			
+			protected function detailList_changeHandler(event:IndexChangeEvent):void
+			{
+				detailList.selectedItem = null;
+			}
+			
+				
+			
+			protected function itemrenderer1_stateChangeCompleteHandler(event:FlexEvent):void
+			{
+				if(currentState == "normal"  ){
+ 					this.height = 50;
+					pop.height  = 0;
+					pop.displayPopUp = false;
+					
+				} else if(currentState == "hovered"){
+					pop.height  = 0;
+ 					this.height = 50;
+					pop.displayPopUp = false;
+				} else if(currentState == "selected"){
+ 					this.height = 50 + detailList.dataProvider.length  *  40;
+					callLater(positionofpop);
+					if(AcDetail.length > 0 ){
+						
+					} else {
+						
+					}
+				}
+				validateDisplayList();
+			}
+
+			private function positionofpop():void {
+				 pop.top = 0;
+				 pop.left = 0;
+				 pop.displayPopUp = true;
+				 gr.x = 0;
+				 validateDisplayList();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<mx:Resize id="resizes" />
+		<mx:Move id="mv" />
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
+	</s:states>
+	
+	<s:Rect width="200" height="50" >
+		<s:fill>
+			<s:SolidColor color.normal="{FlatTheme.upColor}" color.hovered="{FlatTheme.overColor}" color.selected="{FlatTheme.selectColor}" />
+		</s:fill>
+	</s:Rect>
+
+	<s:Group width="100%" height.normal="0" height.hovered="0"  height.selected ="{detailList.dataProvider.length * 40 }" y="0" top="50" includeIn="selected" >
+			<s:List id="detailList" includeIn="selected" visible="{AcDetail.length &gt;= 0}" 
+					left="1" right="1" top="1" bottom="1" 
+					change="detailList_changeHandler(event)" height.normal="0" height.hovered="0"
+					labelField="label" 
+					skinClass="th.co.tomato.themes.component.leftmenu.lefDetailMenuDataListSkin"
+					dataProvider="{AcDetail}"
+					>
+			</s:List>
+	</s:Group>
+	<s:Group  id="gr" y="0" width="200" height="50" x="{FlatTheme.menux}" moveEffect="mv">
+	<s:PopUpAnchor left="0" right="0" top="0" bottom="0"  id="pop" 
+				   height.normal="0" height.hovered="0" 
+				   
+				   >
+		<s:Group  width="200" height="50" horizontalCenter="0" verticalCenter="0" x="{gr.x}" y="0"   > 
+			<s:Path top="-1" left="-1" right="-10" bottom="0"   
+				winding="evenOdd" data="M 193 131 L 393 131 L 401 157 C 401 157 392 179 393 181 C 394 183 193 181 193 181 L 193 131 Z " blendMode="normal" alpha="1">
+				<s:fill>
+					<s:SolidColor color.normal="{FlatTheme.upColor}" color.hovered="{FlatTheme.overColor}" color.selected="{FlatTheme.overColor}" />
+				</s:fill>
+				<s:stroke>
+					<s:SolidColorStroke color="{FlatTheme.upColor}" weight="1" caps="none"/>
+				</s:stroke>
+			</s:Path>
+
+				<s:HGroup width="200" height="50" horizontalAlign="left" paddingLeft="5" verticalAlign="middle" gap="10" includeIn="selected"  >
+					<s:RichText id="txtIcontxt" color="{FlatTheme.color}" color.hovered="{FlatTheme.txthoverColor}" color.normal="{FlatTheme.txtnormalColor}" color.selected="{FlatTheme.txtselectColor}" 
+								fontFamily="myiconfont" fontSize="16"
+								fontWeight="normal" tabStops="S0 S50 S100 S150 S200" text="{data.image1}"
+								/>
+					
+					<s:RichText color="{FlatTheme.color}" color.hovered="{FlatTheme.txthoverColor}" color.normal="{FlatTheme.txtnormalColor}" color.selected="{FlatTheme.txtselectColor}" 
+								fontFamily="Arial" fontSize="16" visible="{FlatTheme.v}" 
+								tabStops="S0 S50 S100 S150 S200" text="{data.text1}" id="txtText"/>
+					<mx:Text text="{gr.x}"  right="0" top="5"/>	
+				</s:HGroup>
+		</s:Group>
+	</s:PopUpAnchor>
+	</s:Group>
+	<s:HGroup width="200" height="50" horizontalAlign="left" paddingLeft="5" verticalAlign="middle" gap="10" id="hgtxt" >
+	<s:RichText id="txtIcontxt1" color="#ffffff" fontFamily="myiconfont" fontSize="16"
+				fontWeight="normal" tabStops="S0 S50 S100 S150 S200" text="{data.image1}"
+				/>
+	
+	<s:RichText color="#ffffff" fontFamily="Arial" fontSize="16" 
+				tabStops="S0 S50 S100 S150 S200" text="{data.text1}" id="txtText1"/>
+	</s:HGroup>
+</s:ItemRenderer>

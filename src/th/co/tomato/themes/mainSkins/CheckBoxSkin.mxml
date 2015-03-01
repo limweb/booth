@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+		width="81" height="23"
+		width.up="107">
+	<fx:Metadata>[HostComponent("spark.components.CheckBox")]</fx:Metadata>
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="over"/>
+		<s:State name="down"/>
+		<s:State name="disabled"/>
+		<s:State name="upAndSelected"/>
+		<s:State name="overAndSelected"/>
+		<s:State name="downAndSelected"/>
+		<s:State name="disabledAndSelected"/>
+	</s:states>
+
+	<s:BitmapImage includeIn="disabled"
+				   x="2" y="2" smooth="true"
+				   source="@Embed('/assets/themes/CheckBox_disabledIcon.png')"/>
+	<s:BitmapImage includeIn="down"
+				   x="0" y="0" smooth="true" source="@Embed('/assets/themes/CheckBox_downIcon.png')"/>
+	<s:BitmapImage includeIn="over"
+				   x="0" y="0" smooth="true" source="@Embed('/assets/themes/CheckBox_overIcon.png')"/>
+	<s:BitmapImage includeIn="downAndSelected"
+				   x="0" y="0" smooth="true"
+				   source="@Embed('/assets/themes/CheckBox_selectedDownIcon.png')"/>
+	<s:BitmapImage includeIn="overAndSelected"
+				   x="0" y="0" smooth="true"
+				   source="@Embed('/assets/themes/CheckBox_selectedOverIcon.png')"/>
+	<s:BitmapImage includeIn="disabledAndSelected,upAndSelected"
+				   x="2" y="1" smooth="true"
+				   source="@Embed('/assets/themes/CheckBox_selectedUpIcon.png')"/>
+	<s:BitmapImage includeIn="up"
+				   x="2" y="2" smooth="true" source="@Embed('/assets/themes/CheckBox_upIcon.png')"/>
+	<s:RichText x="29" y="5" color="#464646" fontFamily="Arial" fontSize="12" tabStops="S0 S50 S100"
+				text="checkbox" id="labelDisplay"
+				color.disabled="#999999" tabStops.disabled="S0 S50"
+				color.disabledAndSelected="#999999" tabStops.disabledAndSelected="S0 S50"/>
+</s:Skin>

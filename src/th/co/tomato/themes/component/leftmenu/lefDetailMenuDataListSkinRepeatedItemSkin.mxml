@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+				width="200" 
+				height="40" 
+				autoDrawBackground="false" 
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				>
+	
+	<fx:Script>
+		<![CDATA[
+			import th.co.tomato.themes.FlatTheme;
+//				resizeEffect="{resizes}"
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.EffectEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			
+			import spark.events.IndexChangeEvent;
+			[Bindable] private var maxwidth:Number = 200; 
+			[Bindable] private var prosition:Number = 160;
+			
+			override protected function commitProperties():void
+			{
+				super.commitProperties();
+				
+				if(this.width < maxwidth  && currentState == "selected"){
+					currentState = "normal";
+					this.height = 40;
+					invalidateDisplayList();
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<mx:Resize id="resizes" />
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
+	</s:states>
+	
+	<s:Rect width="200" height="40" >
+		<s:fill>
+			<s:SolidColor color.normal="0xffffff"  color.selected="{FlatTheme.upColor}" 
+						  color.hovered="{FlatTheme.upColor}"
+						  />
+		</s:fill>
+	</s:Rect>
+	<s:HGroup width="200" height="40" horizontalAlign="left" paddingLeft="20" verticalAlign="middle" gap="10" >
+		
+	<s:RichText id="txtIcontxt" color="#ffffff" color.normal="0x000000" fontFamily="myiconfont" fontSize="16"
+				fontWeight="normal" tabStops="S0 S50 S100 S150 S200" text="{data.image1}"
+				fontSize.normal="14"/>
+	
+	<s:RichText color="#ffffff" fontFamily="Arial" fontSize="14" color.normal="0x000000" 
+				tabStops="S0 S50 S100 S150 S200" text="{data.text1}" id="txtText"/>
+	</s:HGroup>
+		
+</s:ItemRenderer>

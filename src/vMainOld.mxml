@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:component="th.co.tomato.themes.component.*"
+		 xmlns:userservice="th.co.tomato.services.userservice.*"
+		 width="100%" height="100%" minWidth="960" minHeight="500">
+	<fx:Script>
+		<![CDATA[
+			import mx.core.FlexGlobals;
+			import mx.rpc.events.ResultEvent;
+			
+			import th.co.tomato.admin.AdminModul;
+			import th.co.tomato.event.ProgramEvent;
+			import th.co.tomato.main.MainConfig;
+
+			
+
+			
+//			[Bindable] public var vit:vProgramItem = new vProgramItem();
+//			[Bindable] public var vCH:vChannelList = new vChannelList();
+//			[Bindable] public var vPR:vProgramAssigns = new vProgramAssigns();
+//			[Bindable] public var vSCH:vSchedule = new vSchedule();
+//			[Bindable] public var vPKMAIN:vPackageMain = new vPackageMain();
+//			[Bindable] public var vAD:AdminMain = new AdminMain();
+//			[Bindable] public var pop:PopChangePass = new PopChangePass();
+//			[Bindable] public var implog:ImportLog = new ImportLog();
+			
+			public function initMain():void {
+				btnLogout.visible = true;
+				btnChangePass.visible = true;
+
+				trace('start test');
+//				trace(MyClass.instance.notificeCount);
+//				if(MyClass.instance.notificeCount > 0  && MainConfig.getInstance.userModel.Rolls('AD','LIST') ){
+//					btnNotifi.visible = true;
+//				}
+//				imgLogo.visible = true;
+//				imgBanner.visible = true;
+//				gMain.removeAllElements();
+//				gMain.addElement(vSCH);
+//				RmenuGroup.selectedValue = 'SCH';
+//				vSCH.init();
+			}
+			
+			
+			protected function menuChange(event:Event):void
+			{
+//				MainConfig.getInstance.showProgressBar();
+				gMain.removeAllElements();
+				
+				if(RmenuGroup.selectedValue == 'PK'){
+//					gMain.addElement(vPKMAIN);
+//					vPKMAIN.init();
+				} else if(RmenuGroup.selectedValue == 'CH'){
+//					gMain.addElement(vCH);
+//					vCH.init();
+				} else if(RmenuGroup.selectedValue == 'IT') {
+//					gMain.addElement(vit);
+//					vit.init();
+				} else if(RmenuGroup.selectedValue == 'PR') {
+//					gMain.addElement(vPR);
+//					vPR.init();
+				} else if(RmenuGroup.selectedValue == 'AD') {
+//					gMain.addElement(vAD);
+//					vAD.init();
+					gMain.addElement(AdminModul.getInstance.vAD);
+					AdminModul.getInstance.vAD.init();
+				} else if(RmenuGroup.selectedValue == 'SCH') {
+//					gMain.addElement(vSCH);
+//					vSCH.init();
+				}  else {
+					MainConfig.getInstance.hideProgressBar();
+					return;
+				}
+			}
+			
+			
+			private function showImportLogforAdmin():void {
+//				gMain.removeAllElements();
+//				gMain.addElement(implog);
+//				implog.init();
+//				RmenuGroup.selection = null;
+			}
+			
+			
+			protected function logout(event:MouseEvent):void
+			{
+				btnLogout.visible = false;
+				btnChangePass.visible = false;
+				imgLogo.visible = false;
+				btnNotifi.visible = false;
+				FlexGlobals.topLevelApplication.logout();
+			}
+			
+			
+			protected function changePassword(event:MouseEvent):void
+			{
+//				pop = PopChangePass(PopUpManager.createPopUp(this,PopChangePass,true));
+//				pop.p = this;
+			}
+			
+			
+			public function changpass(usr:Object, usrid:Object, oldpass:Object, newpass:Object):void
+			{
+//				changpassResult.token = userService.changpass(usr, usrid, oldpass, newpass);
+			}
+			
+			protected function changpassResult_resultHandler(event:ResultEvent):void
+			{
+//				MessageAlert.getSuccessAlert("Change Password Successed");
+//				PopUpManager.removePopUp(pop);
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				ProgramEvent.instance.getAll(null);
+//				TlenSrvEvent.getInstance.selectAll();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:RadioButtonGroup  id="RmenuGroup"  change="menuChange(event)" />
+	</fx:Declarations>
+			<s:layout>
+				<s:VerticalLayout  />
+			</s:layout>
+			<s:HGroup width="100%" height="40" id="topGroup">
+				<s:Group width="200" height="100%">
+					<s:Image  horizontalCenter="0" source="assets/logo.png" visible="false" id="imgLogo"
+							  verticalCenter="0"/>
+				</s:Group>
+				<s:HGroup width="100%" height="37" paddingRight="10" verticalAlign="middle">
+					<s:Spacer width="100%" />
+					<s:HGroup y="0" doubleClickEnabled="true" horizontalAlign="center"
+							  verticalAlign="middle"  height="100%">
+						<s:Button label="Button" click="button1_clickHandler(event)"/>
+						<s:Button id="btnNotifi" visible="false"  width="140"
+								  label="System Notification" click="showImportLogforAdmin()"
+								  skinClass="th.co.tomato.themes.skins.NotifiButtonSKin"/>
+						<mx:VRule height="100%"/>
+						<s:Image id="btnChangePass" visible="true" buttonMode="true"
+								 click="changePassword(event)"
+								 source="assets/icons/icon_change_pass.png" toolTip="Change Pass"/>
+						<mx:VRule  height="100%" />
+						<mx:LinkButton id="btnLogout" visible="true" x="195" width="67" buttonMode="true" toolTip="Logout"
+								 click="logout(event)" label="Logout" textAlign="center"/>
+					</s:HGroup>
+				</s:HGroup>
+			</s:HGroup>
+					<s:HGroup width="100%" height="100%" id="middelGroup">
+						<s:Group width="200" height="100%">
+							<s:Rect top="0" left="0" right="0" bottom="0">
+								<s:fill>
+									<s:SolidColor  color="0xcccccc"/>
+								</s:fill>
+							</s:Rect>
+							<s:VGroup id="menuGroup" width="200" height="100%"  >
+								<component:Radio_MenuIcon  skinClass="th.co.tomato.themes.skins.radioSkin" 
+														   includeInLayout="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   enabled="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   visible="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }"  
+														   width="100%" label="DashBoard"  value="SCH" groupName="RmenuGroup" IconParametor="a"/>
+								<component:Radio_MenuIcon  skinClass="th.co.tomato.themes.skins.radioSkin" 
+														   includeInLayout="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   enabled="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   visible="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   width="100%" label="Program Assign"   IconParametor="k" groupName="RmenuGroup"  value="PR"/>
+								<component:Radio_MenuIcon  skinClass="th.co.tomato.themes.skins.radioSkin" 
+														   includeInLayout="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   enabled="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   visible="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }"  
+														   width="100%" label="Programs"   IconParametor="j" groupName="RmenuGroup"  value="IT"/>
+								<component:Radio_MenuIcon  skinClass="th.co.tomato.themes.skins.radioSkin" 
+														   includeInLayout="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   enabled="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   visible="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   width="100%" label="Channel"   IconParametor="d" groupName="RmenuGroup" value="CH"/>
+								<component:Radio_MenuIcon  skinClass="th.co.tomato.themes.skins.radioSkin" 
+														   includeInLayout="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   enabled="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }" 
+														   visible="{(MainConfig.getInstance.userModel.Rolls('TV','LIST') || MainConfig.getInstance.userModel.Rolls('AD','LIST')) }"  
+														   width="100%" label="Package"  IconParametor="s"  groupName="RmenuGroup" value="PK" />
+								<s:Spacer height="100%" />
+								<component:Radio_MenuIcon  skinClass="th.co.tomato.themes.skins.radioSkin" 
+														   includeInLayout="{MainConfig.getInstance.userModel.Rolls('AD','LIST')}" 
+														   enabled="{MainConfig.getInstance.userModel.Rolls('AD','LIST')}" 
+														   visible="{MainConfig.getInstance.userModel.Rolls('AD','LIST')}"  
+														   width="100%" height="38" label="Admin"   IconParametor="l" groupName="RmenuGroup"  value="AD"/>
+							</s:VGroup>
+						</s:Group>
+						<s:VGroup id="mainGroup" width="100%" height="100%"  paddingRight="20" >
+									<s:Group width="100%" height="100%" id="gMain" />
+						</s:VGroup>
+						
+					</s:HGroup>
+			
+			
+			<s:Group width="100%" height="30" id="bottomGroup">
+				<s:Rect top="0" left="0" right="0" bottom="0">
+					<s:fill>
+						<s:SolidColor  color="0xcccccc"/>
+					</s:fill>
+				</s:Rect>
+			</s:Group>
+</s:Group>

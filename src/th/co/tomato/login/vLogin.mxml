@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:userservice="services.userservice.*"
+		 xmlns:usersservice="services.usersservice.*"
+		 width="100%" height="100%" creationComplete="init()">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.StringUtil;
+			
+			import th.co.tomato.event.UserServiceEvent;
+			import th.co.tomato.main.MainConfig;
+			import th.co.tomato.utils.MessageAlert;
+			
+			import valueObjects.Userlogin;
+			
+//			import valueObjects.User;
+			protected function loginService(event:MouseEvent):void
+			{
+				if(validate()){
+//					UserServiceEvent.instance.getUserByID(txtuser.text,txtpass.text,null);
+					var o:Object = new Object();
+					o.username = txtuser.text;
+					o.password = txtpass.text;
+					login(o);
+				} else {
+					Alert.show('Please Fill  UserName & password ','Alert!!!');
+				}
+			}
+			
+			private function validate():Boolean {
+				var chk:Boolean = true;
+				
+				if(txtpass.text == ''){
+					chk = false;
+				}
+				
+				if(txtuser.text == ''){
+					chk = false;
+				}
+				
+				return chk;
+			}
+			
+			
+			protected function init():void
+			{
+			}
+			
+			
+			protected function login(user:Object):void
+			{
+				loginResult.token = usersService.login(user);
+			}
+			
+			protected function loginResult_resultHandler(event:ResultEvent):void
+			{
+				if(event.result == -1 ){
+					MessageAlert.getWarningAlert('User or Password invalid');
+				} else {
+					var user:Userlogin = event.result as Userlogin;
+					MainConfig.getInstance.userModel.roles = new ArrayCollection([user.role]);
+					MainConfig.getInstance.userModel.name =  user.username;
+					MainConfig.getInstance.userlogin = user;
+					FlexGlobals.topLevelApplication.gotoMain();
+				}
+			}
+			
+			protected function txtpass_keyUpHandler(event:KeyboardEvent):void
+			{
+				if(event.keyCode == Keyboard.ENTER ){
+					if( StringUtil.trim(txtuser.text).length > 0  && StringUtil.trim(txtpass.text).length > 0 ){
+						loginService(null);
+					}
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:CallResponder id="loginResult" result="loginResult_resultHandler(event)"/>
+		<usersservice:UsersService id="usersService"
+								   fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+								   showBusyCursor="true"/>
+	</fx:Declarations>
+	<s:Image scaleMode="stretch" source="assets/login.jpg" width="100%" height="100%"/>
+	<s:VGroup left="150" top="100" width="192" horizontalAlign="right">
+	<s:HGroup width="100%" horizontalAlign="left">
+		<s:Image source="assets/logo.png"/>
+		<s:Label color="0xFFFFFF" fontSize="20" text="FLAT"/>
+	</s:HGroup>
+	<s:TextInput id="txtuser" width="100%" prompt="User Name" text="testadmin1" keyUp="txtpass_keyUpHandler(event)"/>
+	<s:TextInput id="txtpass" width="100%" displayAsPassword="true" prompt="Password" text="testpassword123"  keyUp="txtpass_keyUpHandler(event)"/>
+	<s:Button label="Login" click="loginService(event)" skinClass="th.co.tomato.themes.skins.ButtonSKin" id="btnLogin"/>
+	</s:VGroup>
+</s:Group>

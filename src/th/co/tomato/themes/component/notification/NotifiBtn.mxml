@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:graphics="assets.graphics.*"
+		 width="60" height="50"
+		 creationComplete="init(event)"
+		 >
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			import mx.events.SandboxMouseEvent;
+			
+			import th.co.tomato.themes.FlatTheme;
+			
+			
+  			private var _ac:ArrayCollection = new ArrayCollection();
+			[Bindable] private var lstHeight:Number = 0;
+
+			[Bindable]
+			public function get ac():ArrayCollection
+			{
+				return _ac;
+			}
+
+			public function set ac(value:ArrayCollection):void
+			{
+				_ac = value;
+				if(_ac.length > 0 ) {
+					btnNotifc.label = _ac.length.toString();
+					if(_ac.length > 5 ){
+						lstHeight = 5 * 29;
+					} else {
+						lstHeight = _ac.length * 29;
+					}
+					
+					
+				} else {
+					btnNotifc.label = '';
+				}
+				
+				trace(btnNotifc.label);
+			}
+
+
+			protected function button_clickHandler():void
+			{
+				if ( currentState == 'State1' ) {
+					currentState='State2';
+				} else {
+					currentState='State1';
+				}
+			}
+
+			protected function list_changeHandler():void
+			{
+				lst.selectedItem = null;
+				currentState='State1';
+			}
+
+			
+			protected function init(event:FlexEvent):void
+			{
+				systemManager.getSandboxRoot().addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+				systemManager.getSandboxRoot().addEventListener(SandboxMouseEvent.MOUSE_DOWN_SOMEWHERE, onMouseDown);
+			}
+			
+			protected function onMouseDown(event:Event):void
+			{				
+				var idd:String = '';
+				if(Object(event.target).hasOwnProperty('id')){
+					idd = Object(event.target).id;
+				}
+				
+				if(event.target == btnNotifc || event.target == this || idd == "itemGroup" ||  idd == "thumb" ){
+					trace('onMouseDown =');
+					
+				} else {
+					trace('onMouseDown  !=',currentState);
+					if(currentState != 'State1'){
+						currentState='State1';
+						validateDisplayList();
+						trace('after change= ',currentState);
+					}
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	
+	<s:states>
+		<s:State name="State1"/>
+		<s:State name="State2"/>
+	</s:states>
+	<s:Button click="button_clickHandler()" skinClass="th.co.tomato.themes.component.notification.NotifiButtonSkin"
+			  right="0" top="0"  label="123"  id="btnNotifc"/>
+	<s:PopUpAnchor includeIn="State2" x="1" y="48" width="177" height="{lstHeight}" displayPopUp.State2="true" displayPopUp.State1="false" >
+	<s:Group width="100%" height="{lstHeight}">
+		<s:Rect width="100%" height="{lstHeight}">
+			<s:stroke>
+				<s:SolidColorStroke caps="none" color="{FlatTheme.upColor}" joints="miter" miterLimit="4" weight="2"/>
+			</s:stroke>
+			<s:fill>
+				<s:SolidColor color="#FFFFFF"/>
+			</s:fill>
+		</s:Rect>
+		<s:List includeIn="State2" id="lst" width="100%" height = "100%"
+				change="list_changeHandler()" dataProvider="{ac}" 
+				skinClass="th.co.tomato.themes.component.notification.NotifiDataListSkin">
+		</s:List>
+	</s:Group>		
+	</s:PopUpAnchor>
+</s:Group>

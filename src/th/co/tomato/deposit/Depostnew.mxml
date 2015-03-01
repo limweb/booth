@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				   xmlns:s="library://ns.adobe.com/flex/spark"
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:deposit="th.co.tomato.deposit.*"
+				   xmlns:invoicesservice="services.invoicesservice.*"
+				   xmlns:depositslipservice="services.depositslipservice.*"
+				   width="100%" height="100%" creationComplete="init()">
+	<s:layout>
+		<s:VerticalLayout paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10" />
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.serializers.json.JSONEncoder;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.IVisualElement;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.messaging.events.MessageAckEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			
+			import th.co.tomato.main.MainConfig;
+			import th.co.tomato.utils.MessageAlert;
+			
+			[Bindable]
+			public var resultAc:Object;
+			[Bindable]
+			public var Ac1:ArrayCollection = new ArrayCollection();
+			[Bindable]
+			public var Ac2:ArrayCollection = new ArrayCollection();
+			[Bindable]
+			public var Ac3:ArrayCollection = new ArrayCollection();
+			[Bindable]
+			public var Ac4:ArrayCollection = new ArrayCollection();
+			
+			[Bindable] private var datepdf:String = '';
+			
+			[Bindable]
+			public var showsum:Boolean = false;
+			private function init():void {
+				scr1.addEventListener(MouseEvent.MOUSE_WHEEL,
+					function scroller1_mouseWheelHandler(event:MouseEvent):void{
+						//calculate the new position 
+						vgMain.verticalScrollPosition+=(event.delta*-20);            
+						//stop the event’s bubbling
+						event.stopPropagation();
+					}
+					,true);
+				getDate();
+
+//				if (HTMLLoader.pdfCapability == HTMLPDFCapability.STATUS_OK) {
+//					_htmlLoader = new HTMLLoader();
+//					_htmlLoader.addEventListener(Event.COMPLETE, onHtmlLoader_COMPLETE);
+//					var urlRequest:URLRequest = new URLRequest("/services/load_pdf.html");
+//					_htmlLoader.load(urlRequest);
+////					addChild(_htmlLoader);
+//					vG.removeAllElements();
+//					vG.addElement(IVisualElement(_htmlLoader));
+//				}
+
+			}
+			
+			protected function search():void
+			{
+			}
+			
+			private function validate():Boolean {
+				var chk:Boolean = true;
+				if(df.text == ''){
+					chk = false;
+				}
+				return chk;
+			}
+			
+			private var lastsearch:String='';
+			protected function btnSearch(event:MouseEvent):void
+			{
+				if(validate()){
+					MainConfig.getInstance.showProgressBar();
+					getbydate(df.text);
+					showsum = false;
+					vgMain.horizontalScrollPosition  = 0;
+				} else {
+					MessageAlert.getWarningAlert('Please Select Date to Search');					
+				}
+			}
+			
+			
+			
+			
+			protected function getbydate(date:String,y:int=0):void
+			{
+				getbydateResult.token = depositslipService.getbydate(date,y);
+			}
+			
+			protected function getbydateResult_resultHandler(event:ResultEvent):void
+			{
+				if(event.result == -1 ){
+					MessageAlert.getWarningAlert('Date for Search is Dupicated');
+				}else if( event.result == -2 ){
+					MessageAlert.getConfirmAlertListener('This Date is > last search Data then 1 \n Are you surce want to used this Deta for Search ?',function(e:CloseEvent):void {
+							if(e.detail == Alert.YES){
+								getbydate(df.text,1);
+							} else {
+								df.selectedDate = DateField.stringToDate(lastsearch, "YYYY-MM-DD");
+							}
+					});
+				}else if( event.result == -3 ){
+					MessageAlert.getErrorAlert('Can not use Date < last Search');
+				} else  {
+					lastsearch = df.text;
+					resultAc = event.result as Object;
+					vG.removeAllElements();
+					MainConfig.getInstance.arr.removeAll();
+					if(resultAc.items && resultAc.items.length == 0 ){
+							MessageAlert.getSuccessAlert('No Data for Search');					
+					} else {
+							if(resultAc.items){
+								var dl:DataGridlist;
+								var o:Object;
+								for (var i:int = 0; i < resultAc.items.length; i++) 
+								{
+									dl = new DataGridlist();
+									dl.percentWidth = 100;
+									dl.Ac = new ArrayCollection(resultAc.items[i].items);
+									dl.userid = resultAc.items[i].user.UID;
+									dl.uname = resultAc.items[i].user.UNAME;
+									dl.sumobj = resultAc.items[i].sum;
+									dl.p = i;
+									o = new Object();
+									o.uname = dl.uname;
+									o.userid = dl.userid;
+									o.sum = dl.newsum;
+									o.amtcash = resultAc.items[i].sum.CASH;
+									o.ccamt = resultAc.items[i].sum.CC;
+									o.chkamt = resultAc.items[i].sum.CHK;
+									o.debitamt = resultAc.items[i].sum.DEBIT;
+									o.p = dl.p;
+									MainConfig.getInstance.arr.addItem(o);
+									vG.addElement(dl);
+								}
+								
+								MainConfig.getInstance.updatesumtotal();
+								showsum = true;								
+							} else {
+								MessageAlert.getSuccessAlert('No Data for Search');		
+							}
+						}
+					}
+					MainConfig.getInstance.hideProgressBar();
+			}
+			
+			protected function depositslipService_faultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail);
+				MainConfig.getInstance.hideProgressBar();
+			}
+			
+			protected function lblfmt(item:Object, column:GridColumn):String
+			{
+				return nft.format(item[column.dataField]);
+			}
+			
+			protected function datagrid1_creationCompleteHandler(event:FlexEvent):void
+			{
+//				csumcash.width = colcash.width;
+//				csumcc.width = colcc.width;
+//				csumchk.width = colchk.width;
+//				csumdebit.width = coldebit.width;
+//				csumtotal.width = colsum.width;
+//				validateDisplayList();
+			}
+		
+			private var titleWin:Pdfview;
+			protected function genpdf(event:MouseEvent):void
+			{	
+//				   var url:String = 'http://127.0.0.1:8000/services/Depositpdf.php'; 
+//					var request:URLRequest = new URLRequest(url) ; 
+//					flash.net.navigateToURL(request, "_blank") ;
+				
+					if(df.text != ''){
+						titleWin = PopUpManager.createPopUp(this,Pdfview,true) as Pdfview;
+						titleWin.pdfdate = df.text;
+						titleWin.width = screen.width * .95 ;
+						titleWin.height = screen.height *.95 ;
+						titleWin.x = 0; 
+						titleWin.y = 0;
+						PopUpManager.centerPopUp(titleWin);	
+					} else  {
+						MessageAlert.getWarningAlert('Please Select Item to Search');
+					}
+			}
+			
+			
+			protected function updatebydate(obj:Object):void
+			{
+				updatebydateResult.token = depositslipService.updatebydate(obj);
+			}
+			
+			protected function updatebydateResult_resultHandler(event:ResultEvent):void
+			{
+				if(event.result == -1 ){
+					MessageAlert.getWarningAlert('Date for Search is Dupicated');
+				} else {
+					MessageAlert.getSuccessAlert('Successed');
+				}
+				datepdf = df.text;
+			}
+			
+			
+			
+			
+			
+			
+			protected function getDate():void
+			{
+				getDateResult.token = depositslipService.getDate();
+			}
+			
+			protected function getDateResult_resultHandler(event:ResultEvent):void
+			{
+				lastsearch = event.result as String;
+				df.selectedDate = DateField.stringToDate(lastsearch, "YYYY-MM-DD");
+				var dff:DateField = new DateField();
+				dff.selectedDate = DateField.stringToDate(lastsearch, "YYYY-MM-DD");
+				df.disabledRanges = [{rangeEnd:new Date(dff.selectedDate.fullYear,dff.selectedDate.month,dff.selectedDate.date-1)}] ;//,{rangeStart:new Date( Date.parse(dft.format(lastsearch)))}];
+			}
+			
+			protected function Save(event:MouseEvent):void
+			{
+				
+				var o:Object = new Object();
+				o.sumAc = new ArrayCollection();
+				for (var i:int = 0; i < resultAc.items.length; i++) 
+				{
+					for(var j:int=0; j< resultAc.items[i].items.length; j++ ){
+						if(resultAc.items[i].items[j].chk == 1 ){
+							o.sumAc.addItem(resultAc.items[i].items[j]);
+						}
+					}
+				}
+				
+				o.sumuser = MainConfig.getInstance.arr;
+				
+				var total:Object = new Object();
+				total.searchdate = df.text;
+				total.sumtotal= MainConfig.getInstance.sumtotal;
+				total.sumcc = MainConfig.getInstance.sumcc;
+				total.sumchk = MainConfig.getInstance.sumchk;
+				total.sumcash = MainConfig.getInstance.sumcash; 
+				total.sumdebit = MainConfig.getInstance.sumdebit;
+				o.total =  total;
+				o.user = MainConfig.getInstance.userModel.name;
+				updatebydate(o);
+			}
+			
+			protected function onHtmlLoader_COMPLETE(event:Event):void
+			{
+				
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<mx:DateFormatter formatString="YYYY-MM-DD" id="dft" />
+		<mx:CurrencyFormatter id="nft" precision="2" currencySymbol="$"  />
+		<s:CallResponder id="getbydateResult" result="getbydateResult_resultHandler(event)"/>
+		<depositslipservice:DepositslipService id="depositslipService"
+											   showBusyCursor="true"/>
+		<s:CallResponder id="updatebydateResult" result="updatebydateResult_resultHandler(event)"/>
+		<s:CallResponder id="getDateResult" result="getDateResult_resultHandler(event)"/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:BorderContainer width="100%">
+		<s:HGroup width="100%" verticalAlign="middle" paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10">
+			<s:Label text="Add new Deposit" fontWeight="bold" fontSize="20" />
+			<s:Spacer width="20" />
+			<s:Label text="Date:" />
+			<mx:DateField id="df" width="120" formatString="YYYY-MM-DD" showToday="true"
+						  disabledRanges="{[{rangeEnd: new Date(2014,00,01)}]}"
+						  yearNavigationEnabled="true" />
+			<!--<s:TextInput text="2014-10-05" id="df" />-->
+			<s:Button label="Search" click="btnSearch(event)"/>
+			<s:Button label="Save" click="Save(event)"/>
+			<s:Button label="Genpdf" click="genpdf(event)"  visible="{datepdf.length > 1}"/>
+		</s:HGroup>
+	</s:BorderContainer>
+	<s:HGroup width="100%" height="100%">
+	<s:Scroller width="100%" height="100%" id="scr1">
+		<s:VGroup width="100%" height="100%" id="vgMain">
+		<s:VGroup width="100%" height="100%" paddingRight="10" id="vG" >
+<!--			<deposit:DataGridlist Ac="{Ac1}" width="100%" ></deposit:DataGridlist>
+			<deposit:DataGridlist Ac="{Ac2}" width="100%" ></deposit:DataGridlist>
+			<deposit:DataGridlist Ac="{Ac3}" width="100%" ></deposit:DataGridlist>
+			<deposit:DataGridlist Ac="{Ac4}" width="100%" ></deposit:DataGridlist>
+			<deposit:DataGridlist Ac="{Ac1}" width="100%" ></deposit:DataGridlist>-->
+		</s:VGroup>
+		<s:VGroup width="100%"  paddingRight="10" visible="{showsum}">
+			<mx:Text text="Summary:" fontSize="18" fontWeight="bold" visible="{showsum}"/>
+			<s:DataGrid width="100%" dataProvider="{MainConfig.getInstance.arr}" visible="{showsum}" creationComplete="datagrid1_creationCompleteHandler(event)" >
+				<s:columns>
+					<s:ArrayList>
+						<s:GridColumn dataField="userid" headerText="UID"></s:GridColumn>
+						<s:GridColumn dataField="uname" headerText="Name"></s:GridColumn>
+						<s:GridColumn dataField="amtcash" headerText="Cash Amt" labelFunction="lblfmt" id="colcash"  width="150" ></s:GridColumn>
+						<s:GridColumn dataField="chkamt" headerText="CHK Amt" labelFunction="lblfmt" id="colchk" width="150" ></s:GridColumn>
+						<s:GridColumn dataField="ccamt" headerText="CC Amt" labelFunction="lblfmt" id="colcc" width="150"></s:GridColumn>
+						<s:GridColumn dataField="debitamt" headerText="Debit Amt" labelFunction="lblfmt" id="coldebit" width="150"></s:GridColumn>
+						<s:GridColumn dataField="sum" headerText="SUM Total" labelFunction="lblfmt" id="colsum" width="200"></s:GridColumn>
+					</s:ArrayList>
+				</s:columns>
+			</s:DataGrid>
+			<s:HGroup width="100%" gap="0">
+				<s:Spacer width="100%" />
+				<mx:Text text="{nft.format(MainConfig.getInstance.sumcash)}" fontSize="17" fontWeight="bold" color="RED" width="150" id="csumcash" />
+				<mx:Text text="{nft.format(MainConfig.getInstance.sumchk)}" fontSize="17" fontWeight="bold" color="RED" width="150" id="csumchk" />
+				<mx:Text text="{nft.format(MainConfig.getInstance.sumcc)}" fontSize="17" fontWeight="bold" color="RED"  width="150" id="csumcc"/>
+				<mx:Text text="{nft.format(MainConfig.getInstance.sumdebit)}" fontSize="17" fontWeight="bold" color="RED"  width="150"  id="csumdebit"/>
+				<mx:Text text="{nft.format(MainConfig.getInstance.sumtotal)}" fontSize="17" fontWeight="bold" color="RED"  width="200" id="csumtotal" />
+			</s:HGroup>
+		</s:VGroup>
+		</s:VGroup>
+	</s:Scroller>
+	<s:VGroup height="100%" id="vuserlist" paddingTop="100"  visible="{showsum}">
+		<s:List dataProvider="{MainConfig.getInstance.arr}"  labelField="sum" id="sumlist" visible="{showsum}">
+			<s:itemRenderer>
+				<fx:Component>
+					<s:ItemRenderer>
+						<mx:VBox horizontalAlign="center" width="100%">
+							<s:Button label="{data.uname}" width="100%" />
+							<mx:Text text="{outerDocument.nft.format(data.sum)}" width="100%"/>
+						</mx:VBox>
+					</s:ItemRenderer>
+				</fx:Component>
+			</s:itemRenderer>
+		</s:List>
+		<mx:Text text="{nft.format(MainConfig.getInstance.sumtotal)}" fontWeight="bold" fontSize="17" color="RED" textAlign="center" visible="{showsum}"  />
+	</s:VGroup>
+	</s:HGroup>
+	
+</s:BorderContainer>

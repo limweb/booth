@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:usersservice="services.usersservice.*"
+			   width="400" height="338" close="titlewindow1_closeHandler(event)" title="New User">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import mx.messaging.MessageAgent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			import mx.utils.StringUtil;
+			
+			import spark.skins.spark.windowChrome.CloseButtonSkin;
+			
+			import th.co.tomato.utils.MessageAlert;
+			
+			[Bindable]
+			public var p:*;
+			
+			[Bindable]
+			public var u:Object;
+			
+			public function init():void {
+				
+				txtusername.text = u.username;
+				
+//				txtpass1.text = txtpass2.text = u.password;
+				
+				if(u.role == 'Admin') {
+					
+					cmbrole.selectedIndex = 1;
+					
+				} else if(u.role =='user'){
+					
+					cmbrole.selectedIndex = 0;
+					
+				} else {
+					
+					cmbrole.selectedIndex = -1;
+				
+				}
+				
+				
+				if(u.status == 1 ){
+					cmbstatus.selectedIndex = 0;
+				} else {
+					cmbstatus.selectedIndex = 1;
+				}
+				
+			}
+			
+			protected function titlewindow1_closeHandler(event:CloseEvent):void
+			{
+				MessageAlert.getConfirmAlertListener('Are you sure want to close this ? ',function(e:CloseEvent):void {
+					if(e.detail == Alert.YES){
+						closepopup();
+					}
+				});
+			}
+			
+			public function closepopup():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function validate():Boolean {
+				var chk:Boolean = true;
+				if(StringUtil.trim(txtusername.text).length < 5 ){
+					txtusername.errorString = 'user name requir 5 chars';
+					chk = false;
+				} else {
+					txtusername.errorString = '';
+				}
+//
+//				if((StringUtil.trim(txtpass1.text).length == StringUtil.trim(txtpass2.text).length)  && StringUtil.trim(txtpass1.text).length >= 6  ) {
+//					
+//					if(txtpass1.text != txtpass2.text){
+//						chk = false;
+//						txtpass1.errorString = 'password1 != password2';
+//						txtpass2.errorString = 'password1 != password2';
+//					} else {
+//						txtpass1.errorString = '';
+//						txtpass2.errorString = '';
+//					}
+//					
+//				} else {
+//					chk = false;
+//					txtpass1.errorString = 'password require 6 chars';
+//					txtpass2.errorString = 'password require 6 chars';
+//				} 
+
+				if(  cmbrole.selectedIndex == -1 || cmbstatus.selectedIndex == -1 ) {
+					 chk = false;
+					 if(cmbrole.selectedIndex == -1 ){
+					 	cmbrole.errorString = 'please select role for user';
+					 } else {
+						cmbrole.errorString = '';
+					 }
+					 
+					 if(cmbstatus.selectedIndex == -1 ){
+					 	cmbstatus.errorString = 'please select status for user';
+					 } else {
+					 	cmbstatus.errorString = '';
+					 }
+				} else {
+						cmbrole.errorString = '';
+					 	cmbstatus.errorString = '';
+				}
+			
+				return chk;
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				if(validate() ){
+					u.username = txtusername.text;
+//					u.password = txtpass1.text;
+					u.role = cmbrole.selectedItem.value;
+					u.status = cmbstatus.selectedItem.value;
+					trace(ObjectUtil.toString(u));
+					register(u);
+				} else {
+					MessageAlert.getWarningAlert('Please validate you fill');
+				}
+			}
+			
+			protected function clear(event:MouseEvent):void
+			{
+//				txtpass1.text = '';
+//				txtpass1.errorString = '';
+//				txtpass2.errorString = '';
+//				txtpass2.text = '';
+				txtusername.text = '';
+				txtusername.errorString = '';
+				cmbrole.selectedIndex = -1;
+				cmbrole.errorString = '';
+				cmbstatus.selectedIndex = -1;
+				cmbstatus.errorString = '';
+			}
+			
+			
+			protected function register(user:Object):void
+			{
+				updateuserResult.token = usersService.updateuser(user);
+			}
+			
+			protected function registerResult_resultHandler(event:ResultEvent):void
+			{
+				if(p) p.getusers();
+				closepopup();
+			}
+			
+			
+				
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<usersservice:UsersService id="usersService"
+								   fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+								   showBusyCursor="true"/>
+		<s:CallResponder id="updateuserResult" result="registerResult_resultHandler(event)"/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Form x="10" y="10" width="378" height="248">
+		<s:FormItem label="Username" required="true">
+			<s:TextInput id="txtusername"  />
+		</s:FormItem>
+<!--		<s:FormItem label="Password" required="true">
+				<s:TextInput  displayAsPassword="true" id="txtpass1" />
+				<s:TextInput  displayAsPassword="true" id="txtpass2" />
+		</s:FormItem>-->
+		<s:FormItem label="Role" required="true">
+			<s:ComboBox labelField="label" id="cmbrole"  >
+				<s:dataProvider>
+					<s:ArrayCollection>
+						<fx:Object label="User" value="user" />
+						<fx:Object label="Admin" value="Admin" />
+					</s:ArrayCollection>
+				</s:dataProvider>
+			</s:ComboBox>
+		</s:FormItem>
+		<s:FormItem label="Status" required="true">
+			<s:ComboBox labelField="label" id="cmbstatus">
+				<s:dataProvider>
+					<s:ArrayCollection>
+						<fx:Object label="Active" value="1" />
+						<fx:Object label="Inactive" value="0" />
+					</s:ArrayCollection>
+				</s:dataProvider>
+			</s:ComboBox>
+		</s:FormItem>
+	</s:Form>
+	<s:Button x="318" y="266" label="Save" click="button1_clickHandler(event)"/>
+	<s:Button x="240" y="266" label="Clear" click="clear(event)"/>
+</s:TitleWindow>

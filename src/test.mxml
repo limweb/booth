@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   creationComplete="out.play()"> 
+	
+	<fx:Declarations> 
+		<s:Resize id="out" target="{spacer}" widthBy="600" duration="2000" 
+				  effectEnd="{iN.play()}"/> 
+		<s:Resize id="iN" target="{spacer}" widthBy="-600" duration="2000" 
+				  effectEnd="{out.play()}"/> 
+	</fx:Declarations> 
+	
+	<s:HGroup width="100%"> 
+		<mx:Spacer id="spacer" width="0%"/> 
+		<s:Group id="gr"> 
+			<mx:Button id="btn" label="Anchor"/> 
+			<s:PopUpAnchor id="popupAnchor" popUpWidthMatchesAnchorWidth="true" 
+						   left="0" right="0" top="0" bottom="0" 
+						   popUpPosition="below" displayPopUp="true"> 
+				<s:Group height="100" x="{gr.x}"> 
+					<s:Rect width="100%" height="100%" 
+							radiusX="5" radiusY="5"> 
+						<s:fill> 
+							<s:SolidColor color="#FFFF99"/> 
+						</s:fill> 
+					</s:Rect> 
+					<s:VGroup width="100%" height="100%" 
+							  horizontalAlign="center" verticalAlign="middle"> 
+						<s:Label text="Popup!"/> 
+					</s:VGroup> 
+				</s:Group> 
+			</s:PopUpAnchor> 
+		</s:Group> 
+	</s:HGroup> 
+	
+</s:WindowedApplication>

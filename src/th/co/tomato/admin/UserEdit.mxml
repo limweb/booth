@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   close="titlewindow1_closeHandler(event)"
+			   width="598" height="246">
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import mx.utils.ObjectUtil;
+			
+			import th.co.tomato.main.MainConfig;
+			import th.co.tomato.utils.MessageAlert;
+			
+//			[Bindable] public var usr:User = new User();
+			[Bindable] public var p:Object;
+			[Bindable] public var newuser:Boolean = false;
+			
+			public function init():void {
+				PopUpManager.centerPopUp(this);
+				setData();
+			}
+			
+			private function setData():void {
+//				if(newuser){
+//					usr.status = 'A';
+//					usr.cBy = MainConfig.getInstance.userModel.userid;
+//					usr.mBy = MainConfig.getInstance.userModel.userid;
+//					usr.roll = '2';
+//					
+//				}
+//				
+//				var i:int = 0;
+//				for (i=0; i < MainConfig.getInstance.acStatus.length; i++) 
+//				{
+//					if(MainConfig.getInstance.acStatus[i].id == usr.status){
+//						cmbStatus.selectedIndex = i;
+//						break;
+//					}
+//				}
+//				
+//				for( i=0;i<AdminModul.getInstance.acRole.length;i++) {
+//					   trace(ObjectUtil.toString(AdminModul.getInstance.acRole[i]));
+//					   
+//					if(AdminModul.getInstance.acRole[i].ROLEID == usr.roll){
+//						cmdRoll.selectedIndex = i;
+//						break;
+//					}
+//				}
+//				
+//				if(usr.userid == 'admin'){
+//					cmdRoll.enabled = false;
+//					cmbStatus.enabled = false;
+//				} else {
+//					cmdRoll.enabled = true;
+//					cmbStatus.editable = true;
+//				}
+				
+				
+			}
+			
+			protected function titlewindow1_closeHandler(event:CloseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+				
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function  validate():Boolean {
+				var chk:Boolean = true;
+				if(txtuserid.text == ''){
+					MessageAlert.getWarningAlert('Please type Userid');
+					chk = false;
+				}
+				return chk;
+			}
+			
+			protected function Save(event:MouseEvent):void
+			{
+//				usr.status = cmbStatus.selectedItem.id;
+//				usr.roll = cmdRoll.selectedItem.ROLEID;
+//				if(newuser){
+//					if(validate()){
+//						usr.userid = txtuserid.text;
+//						p.createItem(MainConfig.getInstance.userModel.userid,usr);					
+//					}
+//				} else {
+//					p.updateItem(MainConfig.getInstance.userModel.userid,usr);
+//				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	<s:Form width="100%" height="176" >
+		
+		<mx:HBox width="100%" height="100%">
+			
+		<mx:VBox width="100%" height="100%">
+				<mx:HBox width="100%">
+					<mx:Text text="UserID" width="80" />					
+					<s:TextInput id="txtuserid" text="" />
+				</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Text text="Status" width="80" />
+					<mx:ComboBox labelField="label" dataProvider="{MainConfig.getInstance.acStatus}" id="cmbStatus" />
+				</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Text text="Roll" width="80" />
+					<mx:ComboBox labelField="ROLECODE" dataProvider="{AdminModul.getInstance.acRole}" id="cmdRoll" />
+				</mx:HBox>
+		</mx:VBox>
+		<mx:VBox width="100%" height="100%">
+			<mx:HBox width="100%" >
+				<s:Label width="150" text="Created By"/>
+				<s:Label width="150" text=""/>
+			</mx:HBox>
+			<mx:HBox width="100%" >
+				<s:Label width="150" text="Modified By"/>
+				<s:Label width="150" text=""/>
+			</mx:HBox>
+			<mx:HBox width="100%" >
+				<s:Label width="150" text="Created Date"/>
+				<s:Label width="150" text=""/>
+			</mx:HBox>
+			<mx:HBox width="100%" >
+				<s:Label text="Modified Date" width="150"/>
+				<s:Label text="" width="150"/>
+			</mx:HBox>
+		</mx:VBox>
+		</mx:HBox>
+	</s:Form>
+	<mx:HBox width="100%" height="24" horizontalAlign="right" paddingRight="20" textAlign="left">
+		<s:Button label="Cancel" click="button1_clickHandler(event)"/>
+		<s:Button label="Save" click="Save(event)"/>
+	</mx:HBox>
+</s:TitleWindow>

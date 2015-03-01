@@ -1,0 +1,19 @@
+
+@namespace s "library://ns.adobe.com/flex/spark";
+@font-face
+{
+	fontFamily: myiconfont;
+	src: url("C:\Windows\Fonts\myiconfont.ttf");
+	embedAsCFF: true;
+}
+
+s|ToggleButton {
+	skinClass:ClassReference("th.co.tomato.themes.skins.ArrowButtonSkin");
+}
+s|List {
+	skinClass:ClassReference("th.co.tomato.themes.skins.ObjTreeListSkin");
+}
+
+s|Scroller {
+	skinClass:ClassReference("th.co.tomato.themes.component.SlimScroller.FlexScrollerSkin")
+}

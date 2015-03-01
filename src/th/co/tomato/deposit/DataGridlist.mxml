@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 paddingTop="10"
+		 width="100%">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.utils.ObjectUtil;
+			
+			import org.hamcrest.mxml.object.Null;
+			
+			import th.co.tomato.main.MainConfig;
+			
+			[Bindable]
+			public var Ac:ArrayCollection = new ArrayCollection();
+			
+			public var p:int = -1;
+			[Bindable]
+			public var newsum:Number = 0;
+			[Bindable]
+			public var userid:String='';
+			[Bindable]
+			public var uname:String = '';
+			[Bindable]
+			public var sumcash:Number = 0;
+			[Bindable] 
+			public var sumcheck:Number = 0;
+			[Bindable]
+			public var sumdebit:Number = 0;
+			[Bindable]
+			public var sumcc:Number = 0;
+			
+			private var _sumobj:Object = new Object();
+			
+			[Bindable]
+			public function get sumobj():Object
+			{
+				return _sumobj;
+			}
+
+			public function set sumobj(value:Object):void
+			{
+				_sumobj = value;
+				newsum = parseFloat(sumobj.CC)+parseFloat(sumobj.CHK)+parseFloat(sumobj.DEBIT)+parseFloat(sumobj.CASH);
+				sumcash = sumobj.CASH;
+				sumcc = sumobj.CC;
+				sumdebit = sumobj.DEBIT;
+				sumcheck = sumobj.CHK;
+			}
+
+			public function updatecheck(obj:Object):void {
+				var sum:Number = 0;
+				sumcash = 0;
+				sumcc = 0;
+				sumcheck = 0;
+				sumdebit = 0;
+				var numchk:int = 0;
+				
+				for(var i:int=0;i<Ac.length;i++){
+					if(Ac[i].chk == 1) {
+					    sum += parseFloat(Ac[i].GrandTotal);
+						sumcash += parseFloat(Ac[i].CASHAMT);
+						sumcheck += parseFloat(Ac[i].CHECKAMT);
+						sumcc += parseFloat(Ac[i].CCAMT);
+						sumdebit += parseFloat(Ac[i].DEBITAMT);
+						numchk++;
+					}	
+				}
+				newsum = sum;
+				//				if(numchk == 0 ){ gridcol.columnIndex.chkall.select = false; }
+				gridcol;
+				MainConfig.getInstance.arr[p].sum = newsum;
+				MainConfig.getInstance.arr[p].amtcash = sumcash;
+				MainConfig.getInstance.arr[p].ccamt = sumcc;
+				MainConfig.getInstance.arr[p].chkamt = sumcheck;
+				MainConfig.getInstance.arr[p].debitamt = sumdebit;
+				var o:* = MainConfig.getInstance.arr[p];
+//				var a:ArrayCollection = MainConfig.getInstance.arr;
+				MainConfig.getInstance.arr.refresh();
+				MainConfig.getInstance.updatesumtotal();
+				validateNow();
+				validateDisplayList();
+			}
+			
+			protected function lblfmt(item:Object, column:GridColumn):String
+			{
+				return nft.format(item[column.dataField]);
+			}
+			
+			public function updatechkall(chk:int):void {
+				for (var i:int = 0; i < Ac.length; i++) 
+				{
+					Ac[i].chk = chk;
+				}
+				var sum:Number = 0;
+				var numchk:int = 0;
+				sumcash = 0;
+				sumcc = 0;
+				sumcheck = 0;
+				sumdebit = 0;
+				
+				for(i=0;i<Ac.length;i++){
+					if(Ac[i].chk == 1) {
+						numchk++;
+						sum += parseFloat(Ac[i].GrandTotal);
+						sumcash += parseFloat(Ac[i].CASHAMT);
+						sumcheck += parseFloat(Ac[i].CHECKAMT);
+						sumcc += parseFloat(Ac[i].CCAMT);
+						sumdebit += parseFloat(Ac[i].DEBITAMT);
+					}	
+				}
+				newsum = sum;
+				MainConfig.getInstance.arr[p].sum = newsum;
+				MainConfig.getInstance.arr[p].amtcash = sumcash;
+				MainConfig.getInstance.arr[p].ccamt = sumcc;
+				MainConfig.getInstance.arr[p].chkamt = sumcheck;
+				MainConfig.getInstance.arr[p].debitamt = sumdebit;
+				var o:* = MainConfig.getInstance.arr[p];
+				//				var a:ArrayCollection = MainConfig.getInstance.arr;
+				MainConfig.getInstance.arr.refresh();
+				MainConfig.getInstance.updatesumtotal();
+				validateNow();
+				validateDisplayList();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<mx:CurrencyFormatter id="nft" precision="2" currencySymbol="$"  />
+	</fx:Declarations>
+	<s:BorderContainer width="100%">
+	<mx:HBox paddingLeft="10" verticalAlign="middle" width="100%" paddingRight="10">
+		<s:Label text="User:" fontWeight="bold" /><mx:Text text="{userid}:{uname}" />
+	</mx:HBox>
+	</s:BorderContainer>
+	<s:DataGrid width="100%" dataProvider="{Ac}" height="{Ac.length* 30 + 60}" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+		<s:columns>
+			<s:ArrayList>
+				<!--<s:GridColumn dataField="id" headerText="Id" width="50"></s:GridColumn>-->
+				<s:GridColumn dataField="chk" headerText="" width="30" id="gridcol"  >
+					<s:headerRenderer>
+						<fx:Component>
+							<s:DefaultGridHeaderRenderer>
+								
+								<fx:Script>
+									<![CDATA[
+										
+										protected function chkall_changeHandler(event:Event):void
+										{
+											if(chkall.selected){
+												outerDocument.updatechkall(1);
+											} else {
+												outerDocument.updatechkall(0);
+											}
+										}
+									]]>
+								</fx:Script>
+								
+								<mx:HBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+									<mx:CheckBox selected="true" id="chkall" change="chkall_changeHandler(event)" />
+								</mx:HBox>								
+							</s:DefaultGridHeaderRenderer>
+						</fx:Component>
+					</s:headerRenderer>
+					<s:itemRenderer>
+						<fx:Component>
+							<s:GridItemRenderer>
+								<fx:Script>
+									<![CDATA[
+										import mx.utils.ObjectUtil;
+										
+										protected function checkbox1_changeHandler(event:Event):void
+										{
+										    trace(ObjectUtil.toString(data));
+											(chkSelect.selected) ? data.chk = 1 : data.chk = 0;
+										    outerDocument.updatecheck(data);
+											
+										}
+										
+										override public function get data():Object
+										{
+											return super.data;
+										}
+										
+										override public function set data(value:Object):void
+										{
+											super.data = value;
+											if(value){
+													trace(value.chk);
+													if(value.chk==1){
+													  	chkSelect.selected = true;	
+													} else {
+											        	chkSelect.selected = false;  
+													}
+											}
+										}
+									]]>
+								</fx:Script>
+								
+								<s:CheckBox verticalCenter="0" id="chkSelect" horizontalCenter="0"  change="checkbox1_changeHandler(event)"   />
+							</s:GridItemRenderer>
+						</fx:Component>
+					</s:itemRenderer>    
+				</s:GridColumn>
+				<s:GridColumn dataField="RecID" headerText="Rept Id" width="120"></s:GridColumn>
+				<s:GridColumn dataField="VID" headerText="Vendor ID" width="100"></s:GridColumn>
+				<s:GridColumn dataField="VName" headerText="Vendor Name"></s:GridColumn>
+				<s:GridColumn dataField="CASHAMT" headerText="Cash Amt" id="colcashamt" width="100" labelFunction="lblfmt"></s:GridColumn>
+				<s:GridColumn dataField="CHECKAMT" headerText="CHECK Amt" id="colchkamt" width="100" ></s:GridColumn>
+				<s:GridColumn dataField="CHECKNO" headerText="Check #" width="150" id="colcheckno"></s:GridColumn>
+				<s:GridColumn dataField="CCAMT"  headerText="CC Amt" width="100" id="colccamt"   labelFunction="lblfmt"></s:GridColumn>
+				<s:GridColumn dataField="DEBITAMT" headerText="Debit Amt" width="100" id="coldebitamt" labelFunction="lblfmt"></s:GridColumn>
+				<s:GridColumn dataField="GrandTotal"  headerText="Total Amount" width="120" id="coltotalamt"  labelFunction="lblfmt">
+<!--					<s:itemRenderer>
+						<fx:Component>
+							<s:DefaultGridItemRenderer textAlign="right" />
+						</fx:Component>
+					</s:itemRenderer>-->
+				</s:GridColumn>
+				
+				<!--<s:GridColumn dataField="app_id" headerText="app_id"></s:GridColumn>-->
+				<!--<s:GridColumn dataField="id" width="50" headerText="id"></s:GridColumn>-->
+<!--				<s:GridColumn dataField="payid" headerText="payid"></s:GridColumn>
+				<s:GridColumn dataField="modeid" headerText="modeid"></s:GridColumn>
+				<s:GridColumn dataField="paymode" headerText="paymode"></s:GridColumn>
+				<s:GridColumn dataField="check" headerText="check"></s:GridColumn>
+				<s:GridColumn dataField="debit" headerText="debit"></s:GridColumn>-->
+			</s:ArrayList>
+		</s:columns>
+	</s:DataGrid>
+	<mx:HBox width="100%" verticalAlign="middle" verticalGap="0" horizontalGap="0" paddingRight="0" paddingLeft="10">
+		<s:Label text="Total:"  fontWeight="bold"/>
+		<s:Spacer width="100%" />
+		<mx:Text text="{nft.format(sumobj.CASH)}" width="{colcashamt.width}"/>
+		<mx:Text text="{nft.format(sumobj.CHK)}" width="{colchkamt.width}"/>
+		<s:Spacer width="{colcheckno.width}" />
+		<mx:Text text="{nft.format(sumobj.CC)}" width="{colccamt.width}"/>
+		<mx:Text text="{nft.format(sumobj.DEBIT)}" width="{coldebitamt.width}"/>
+		<mx:Text text="{nft.format( parseFloat(sumobj.CC)+parseFloat(sumobj.CHK)+parseFloat(sumobj.DEBIT)+parseFloat(sumobj.CASH)) }" fontWeight="bold" width="{coltotalamt.width}"/>
+	</mx:HBox>
+	<mx:HBox color="RED" width="100%" verticalAlign="middle" verticalGap="0" horizontalGap="0" paddingRight="0" paddingLeft="10" >
+		<s:Label text="Total Selected:"  fontWeight="bold"/>
+		<s:Spacer width="100%" />
+		<mx:Text text="{nft.format(sumcash)}" width="{colcashamt.width}"/>
+		<mx:Text text="{nft.format(sumcheck)}" width="{colchkamt.width}"/>
+		<s:Spacer width="{colcheckno.width}" />
+		<mx:Text text="{nft.format(sumcc)}" width="{colccamt.width}"/>
+		<mx:Text text="{nft.format(sumdebit)}" width="{coldebitamt.width}"/>
+		<mx:Text color="RED" text="{nft.format(newsum)}" fontWeight="bold" fontSize="15" width="{coltotalamt.width}"/>
+	</mx:HBox>
+</s:VGroup>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		width="88" height="16">
+	<fx:Metadata>[HostComponent("spark.components.RadioButton")]</fx:Metadata>
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="over"/>
+		<s:State name="down"/>
+		<s:State name="disabled"/>
+		<s:State name="upAndSelected"/>
+		<s:State name="overAndSelected"/>
+		<s:State name="downAndSelected"/>
+		<s:State name="disabledAndSelected"/>
+	</s:states>
+	<s:BitmapImage includeIn="up"
+				   x="0" y="0" smooth="true"
+				   source="@Embed('/assets/themes/RadioButton_upIcon.png')"/>
+	<s:BitmapImage includeIn="upAndSelected"
+				   x="0" y="0" smooth="true"
+				   source="@Embed('/assets/themes/RadioButton_selectedUpIcon.png')"/>
+	<s:BitmapImage includeIn="overAndSelected"
+				   x="0" y="0" smooth="true"
+				   source="@Embed('/assets/themes/RadioButton_selectedOverIcon.png')"/>
+	<s:BitmapImage includeIn="down"
+				   x="0" y="0" smooth="true"
+				   source="@Embed('/assets/themes/RadioButton_selectedDownIcon.png')"/>
+	<s:BitmapImage includeIn="disabledAndSelected"
+				   x="0" y="0" smooth="true"
+				   source="@Embed('/assets/themes/RadioButton_selectedDisabledIcon.png')"/>
+	<s:BitmapImage includeIn="over,up"
+				   x="0" y="0" smooth="true"
+				   source="@Embed('/assets/themes/RadioButton_overIcon.png')"/>
+	<s:BitmapImage includeIn="downAndSelected"
+				   x="0" y="0" smooth="true"
+				   source="@Embed('/assets/themes/RadioButton_downIcon.png')"/>
+	<s:BitmapImage includeIn="disabled"
+				   x="0" y="0" smooth="true"
+				   source="@Embed('/assets/themes/RadioButton_disabledIcon.png')"/>
+	<s:RichText id="labelDisplay" x="22" y="2" color="#464646" fontFamily="Arial" fontSize="12"
+				tabStops="S0 S50 S100"
+				color.disabled="#999999" tabStops.disabled="S0 S50"
+				color.disabledAndSelected="#999999" tabStops.disabledAndSelected="S0 S50"/>
+</s:Skin>

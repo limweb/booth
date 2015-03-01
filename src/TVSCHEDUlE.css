@@ -1,0 +1,129 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace local "*";
+@namespace component "th.co.tomato.themes.component.*";
+
+
+/* StyleableTextField, regular */
+@font-face {
+	src: url("assets/font/tahoma.ttf");
+	fontFamily: "MyFont";
+	embedAsCFF: false;
+}
+
+/* StyleableTextField, bold */
+@font-face {
+	src: url("assets/font/tahomabd.ttf");
+	fontFamily: "MyFont";
+	fontWeight: bold;
+	embedAsCFF: false;
+}
+
+/* Label, regular */
+@font-face {
+	src: url("assets/font/Thonburi.ttf");
+	fontFamily: "MyFontCFF";
+	embedAsCFF: true;
+}
+
+/* Label, bold */
+@font-face {
+	src: url("assets/font/ThonburiBold.ttf");
+	fontFamily: "MyFontCFF";
+	fontWeight: bold;
+	embedAsCFF: true;
+}
+
+/* SYMBOL ICON FONT */
+@font-face { 
+	src: url("/assets/Font/Entypo-webfont.ttf"); 
+	fontFamily: Entypo; 
+	embedAsCFF: true; 
+}
+@font-face { 
+	src: url("/assets/Font/WebSymbols-Regular-webfont.ttf"); 
+	fontFamily: WebSymbols; 
+	embedAsCFF: true; 
+}
+
+global
+{
+	fontFamily: MyFontCFF;
+	fontSize:16;
+	aaa: #FF0000;
+	bbb: #00FF00;
+}
+
+.Call_Symbols {
+	fontFamily: Entypo;
+	font-weight: normal;
+	font-size: 35;
+	color: #FFFFFF;
+	
+	paddingLeft: 5;
+}
+
+mx|AdvancedDataGrid {
+	fontFamily:MyFont;	
+	font-size: 12;
+	font-weight: normal;
+}
+
+mx|Text,
+mx|DataGrid,
+mx|ComboBox,
+mx|DateField,
+mx|ToolTip,
+mx|LinkButton,
+mx|Label,
+mx|DateChooser
+{
+	
+	fontFamily: MyFont;
+	fontSize:14;
+}
+
+
+
+mx|TabNavigator {
+	
+	fontFamily: MyFont;
+	fontSize:14;
+	tabHeight: 32;
+	tabWidth: 89;
+	horizontalGap: 5;
+}	
+
+/*mx|DateField {
+	fontFamily: MyFont;
+	fontSize:14;
+}*/
+
+component|SM_TimeEntry {
+	fontFamily: MyFont;
+	fontSize:14;
+}
+
+
+s|TitleWindow #titleDisplay {
+	color: #FFFFFF;
+}
+s|TextInput {
+	color: #000000;
+	fontFamily: MyFontCFF;
+}
+
+s|Button {
+	skinClass:ClassReference("th.co.tomato.themes.skins.ButtonSKin");
+}
+
+mx|Alert {
+	fontFamily: MyFont;
+	fontSize:14;
+	backgroundAlpha: 1;
+	backgroundColor: #70CAE9;
+	borderAlpha: 0.6;
+	borderColor: #30A7CF;
+	dropShadowEnabled: false;
+}

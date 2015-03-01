@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:MainClass="th.co.tomato.themes.component.MainClass.*"
+		 creationComplete="init(event)" 
+		 minWidth="100" height="154" 
+		 >
+	<fx:Script>
+		<![CDATA[
+			import th.co.tomato.themes.FlatTheme;
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			import mx.events.SandboxMouseEvent;
+			
+			
+			[Bindable] public var iconText:String = '';
+			[Bindable] public var SelectText:String = '';
+			[Bindable] public var dataprovidor:ArrayCollection;
+			
+			
+			protected function button_clickHandler():void
+			{
+				const state:String = currentState;
+				if ( state == 'State1' ) {
+					currentState='State2';
+				}
+				if ( state == 'State2' ) {
+					currentState='State1';
+				}
+			}
+
+			protected function list_changeHandler():void
+			{
+				iconText = list1.selectedItem.text1;
+				SelectText = list1.selectedItem.text2;
+				list1.selectedIndex = -1;
+				currentState='State1';
+			}
+
+			protected function init(event:FlexEvent):void
+			{
+				systemManager.getSandboxRoot().addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+				systemManager.getSandboxRoot().addEventListener(SandboxMouseEvent.MOUSE_DOWN_SOMEWHERE, onMouseDown);
+			}
+			
+			protected function onMouseDown(event:Event):void
+			{
+				var idd:String = '';
+				if(Object(event.target).hasOwnProperty('id')){
+					idd = Object(event.target).id;
+				}
+				
+				if( idd == 'myIconbtn' || event.target == this || idd == "ItemGroup" ||  idd == "thumb"  ){
+					trace('onMouseDown =');
+					
+				} else {
+					trace('onMouseDown  !=',currentState);
+					if(currentState != 'State1'){
+						currentState='State1';
+						validateDisplayList();
+						trace('after change= ',currentState);
+					}
+				}
+			}	
+			
+		]]>
+
+	</fx:Script>
+	<s:states>
+		<s:State name="State1"/>
+		<s:State name="State2"/>
+	</s:states>
+	
+	<s:PopUpAnchor includeIn="State2" left="0" right="1" top="29" bottom="1" id="popanc"
+				   visible.State1="false" x.State1="0" y.State1="38" displayPopUp.State1="false"
+				   left.State2="1" right.State2="1" top.State2="50" bottom.State2="1"
+				   displayPopUp.State2="true">
+	<s:Group  width.State2="100%" height.State2="100%" id="MainG">
+	<s:Rect top="0" left="0" right="0" bottom="-2">
+		<s:fill.State2>
+			<s:SolidColor color.State2="0xFFFFFF" />
+		</s:fill.State2>
+		<s:stroke>
+			<s:SolidColorStroke color="{FlatTheme.upColor}" weight="1" />
+		</s:stroke>
+	</s:Rect>	
+	<s:List id="list1" left="0" right="1" top="5" bottom="1" change="list_changeHandler()" horizontalScrollPolicy="on"
+			skinClass="th.co.tomato.themes.component.BtnListSelect.DataListSelectSkin" labelField=""
+			dataProvider="{dataprovidor}"
+			>
+	
+	</s:List>
+	</s:Group>	
+	</s:PopUpAnchor>
+	<MainClass:MyIconBtn  y="0" right="0" click="button_clickHandler()" 
+						  skinClass="th.co.tomato.themes.component.BtnListSelect.ButtonSkinListSelect" iconText="{iconText}" 
+						  label="{SelectText}" id="myIconbtn" />
+</s:Group>

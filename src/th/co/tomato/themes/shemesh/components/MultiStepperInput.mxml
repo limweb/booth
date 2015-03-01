@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Ofir Shemesh - http://shemesh.wordpress.com
+BMC Software, 2008
+-->
+<mx:TextInput xmlns:mx="http://www.adobe.com/2006/mxml"
+	 borderStyle="none" focusAlpha="0" maxChars="2"
+	 textAlign="center" backgroundAlpha="0">
+</mx:TextInput>

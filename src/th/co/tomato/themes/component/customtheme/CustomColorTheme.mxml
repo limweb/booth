@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   width="698" height="770">
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import th.co.tomato.themes.FlatTheme;
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				ta.text = '<fx:Object text1="a" text2="'+ pbColor.selectedColor.toString(16).toUpperCase() +'" color = "'+pbColor.selectedColor.toString(16).toUpperCase() +'" upColor = "'+ pbupColor.selectedColor.toString(16).toUpperCase() 
+					+'" overColor = "'+pboverColor.selectedColor.toString(16).toUpperCase() +'" downColor = "'+ pbdownColor.selectedColor.toString(16).toUpperCase()+'" disableColor = "'+pbdisableColor.selectedColor.toString(16).toUpperCase() 
+					+'" normalColor = "'+ pbnormalColor.selectedColor.toString(16).toUpperCase()+'" hoverColor = "'+ pbhorverColor.selectedColor.toString(16).toUpperCase()+'" selectColor = "'+ pbselectColor.selectedColor.toString(16).toUpperCase()
+					+'" upselect = "'+pbupselectColor.selectedColor.toString(16).toUpperCase() +'"  overselect = "'+pboverselectColor.selectedColor.toString(16).toUpperCase() 
+					+'" downselect = "'+pbdownselectColor.selectedColor.toString(16).toUpperCase() +'"  txtColor = "'+ptextColor.selectedColor.toString(16).toUpperCase()
+					+'" txtupColor = "'+ptupColor.selectedColor.toString(16).toUpperCase() +'" txtoverColor = "'+ ptoverColor.selectedColor.toString(16).toUpperCase()+'" txtdownColor = "'+ptdownColor.selectedColor.toString(16).toUpperCase() 
+					+'" txtdisaColor = "'+ ptdisableColor.selectedColor.toString(16).toUpperCase()+'"  txtnormalColor = "'+ptnormalColor.selectedColor.toString(16).toUpperCase() +'"  txthoverColor = "'
+					+ pthorverColor.selectedColor.toString(16).toUpperCase()+'"  txtselectColor = "'+ptselectColor.selectedColor.toString(16).toUpperCase()
+					+'" txtupselectColor = "'+ptupselectColor.selectedColor.toString(16).toUpperCase() +'"  txtoverselectColor = "'+ptoverselectColor.selectedColor.toString(16).toUpperCase() +'"  txtdownselectColor = "'
+					+ptdownselectColor.selectedColor.toString(16).toUpperCase() +'"  />';
+				
+				FlatTheme.setColor(pbColor.selectedColor.toString(16),pbupColor.selectedColor.toString(16),pboverColor.selectedColor.toString(16),pbdownColor.selectedColor.toString(16),pbdisableColor.selectedColor.toString(16),
+					pbnormalColor.selectedColor.toString(16),pbhorverColor.selectedColor.toString(16),pbselectColor.selectedColor.toString(16),pbupselectColor.selectedColor.toString(16),pboverselectColor.selectedColor.toString(16),
+					pbdownselectColor.selectedColor.toString(16),ptextColor.selectedColor.toString(16),ptupColor.selectedColor.toString(16),ptoverColor.selectedColor.toString(16),ptdownColor.selectedColor.toString(16),ptdisableColor.selectedColor.toString(16),
+					ptnormalColor.selectedColor.toString(16),pthorverColor.selectedColor.toString(16),ptselectColor.selectedColor.toString(16),ptupselectColor.selectedColor.toString(16),ptoverselectColor.selectedColor.toString(16),ptdownselectColor.selectedColor.toString(16));
+				
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:HGroup width="100%" height="50">
+		<s:HGroup width="100%" height="50" verticalAlign="middle">
+			<mx:Text  width="100"  text="Color"/>
+			<mx:Text  width="100" />
+			<s:Group width="50" height="50">
+				<s:Rect left="0" right="0" top="0" bottom="0">
+					<s:fill>
+						<s:SolidColor color="{pbColor.selectedColor}"/>
+					</s:fill>
+				</s:Rect>
+				<s:RichText color="{ptextColor.selectedColor}" horizontalCenter="0" text="Color"
+							verticalCenter="0"/>
+			</s:Group>
+			<mx:Text  width="100"  text="backgroup" textAlign="right" />
+			<mx:ColorPicker id="pbColor" width="50" height="50" selectedColor="{FlatTheme.color}"/>
+			<mx:Text  width="100"  text="text"   textAlign="right" />
+			<mx:ColorPicker id="ptextColor" width="50" height="50" selectedColor="{FlatTheme.txtColor}"/>
+			<s:Button label="GEN" click="button1_clickHandler(event)"/>
+		</s:HGroup>
+	</s:HGroup>
+	<s:HGroup width="100%" height="50">
+		<s:HGroup width="100%" height="50" verticalAlign="middle">
+			<mx:Text  width="100"  text="Color"/>
+			<mx:Text  width="100"  text="UP"/>
+			<s:Group width="50" height="50">
+				<s:Rect left="0" right="0" top="0" bottom="0">
+					<s:fill>
+						<s:SolidColor color="{pbupColor.selectedColor}"/>
+					</s:fill>
+				</s:Rect>
+				<s:RichText color="{ptupColor.selectedColor}" horizontalCenter="0" text="Color"
+							verticalCenter="0"/>
+			</s:Group>
+			<mx:Text  width="100"  text="backgroup" textAlign="right" />
+			<mx:ColorPicker id="pbupColor" width="50" height="50" selectedColor="{FlatTheme.upColor}" />
+			<mx:Text  width="100"  text="text"   textAlign="right" />
+			<mx:ColorPicker id="ptupColor" width="50" height="50"  selectedColor="{FlatTheme.txtupColor}" />
+		</s:HGroup>
+	</s:HGroup>
+	<s:HGroup width="100%" height="50">
+		<s:HGroup width="100%" height="50" verticalAlign="middle">
+			<mx:Text  width="100"  text="Color"/>
+			<mx:Text  width="100"  text="OVER"/>
+			<s:Group width="50" height="50">
+				<s:Rect left="0" right="0" top="0" bottom="0">
+					<s:fill>
+						<s:SolidColor color="{pboverColor.selectedColor}"/>
+					</s:fill>
+				</s:Rect>
+				<s:RichText color="{ptoverColor.selectedColor}" horizontalCenter="0" text="Color"
+							verticalCenter="0"/>
+			</s:Group>
+			<mx:Text  width="100"  text="backgroup" textAlign="right" />
+			<mx:ColorPicker id="pboverColor" width="50" height="50"  selectedColor="{FlatTheme.overColor}" />
+			<mx:Text  width="100"  text="text"   textAlign="right" />
+			<mx:ColorPicker id="ptoverColor" width="50" height="50" selectedColor="{FlatTheme.txtoverColor}" />
+		</s:HGroup>
+	</s:HGroup>
+	<s:HGroup width="100%" height="50">
+		<s:HGroup width="100%" height="50" verticalAlign="middle">
+			<mx:Text  width="100"  text="Color"/>
+			<mx:Text  width="100"  text="DOWN"/>
+			<s:Group width="50" height="50">
+				<s:Rect left="0" right="0" top="0" bottom="0">
+					<s:fill>
+						<s:SolidColor color="{pbdownColor.selectedColor}"/>
+					</s:fill>
+				</s:Rect>
+				<s:RichText color="{ptdownColor.selectedColor}" horizontalCenter="0" text="Color"
+							verticalCenter="0"/>
+			</s:Group>
+			<mx:Text  width="100"  text="backgroup" textAlign="right" />
+			<mx:ColorPicker id="pbdownColor" width="50" height="50" selectedColor="{FlatTheme.downColor}" />
+			<mx:Text  width="100"  text="text"   textAlign="right" />
+			<mx:ColorPicker id="ptdownColor" width="50" height="50" selectedColor="{FlatTheme.txtdownColor}" />
+		</s:HGroup>
+	</s:HGroup>
+	<s:HGroup width="100%" height="50">
+		<s:HGroup width="100%" height="50" verticalAlign="middle">
+			<mx:Text  width="100"  text="Color"/>
+			<mx:Text  width="100"  text="DISABLE"/>
+			<s:Group width="50" height="50">
+				<s:Rect left="0" right="0" top="0" bottom="0">
+					<s:fill>
+						<s:SolidColor color="{pbdisableColor.selectedColor}"/>
+					</s:fill>
+				</s:Rect>
+				<s:RichText color="{ptdisableColor.selectedColor}" horizontalCenter="0" text="Color"
+							verticalCenter="0"/>
+			</s:Group>
+			<mx:Text  width="100"  text="backgroup"   textAlign="right" />
+			<mx:ColorPicker id="pbdisableColor" width="50" height="50" selectedColor="{FlatTheme.disableColor}" />
+			<mx:Text  width="100"  text="text"   textAlign="right" />
+			<mx:ColorPicker id="ptdisableColor" width="50" height="50" selectedColor="{FlatTheme.txtdisaColor}" />
+		</s:HGroup>
+	</s:HGroup>
+	<s:HGroup width="100%" height="50">
+		<s:HGroup width="100%" height="50" verticalAlign="middle">
+			<mx:Text  width="100"  text="Color"/>
+			<mx:Text  width="100"  text="NORMAL"/>
+			<s:Group width="50" height="50">
+				<s:Rect left="0" right="0" top="0" bottom="0">
+					<s:fill>
+						<s:SolidColor color="{pbnormalColor.selectedColor}"/>
+					</s:fill>
+				</s:Rect>
+				<s:RichText color="{ptnormalColor.selectedColor}" horizontalCenter="0" text="Color"
+							verticalCenter="0"/>
+			</s:Group>
+			<mx:Text  width="100"  text="backgroup"   textAlign="right" />
+			<mx:ColorPicker id="pbnormalColor" width="50" height="50" selectedColor="{FlatTheme.normalColor}" />
+			<mx:Text  width="100"  text="text"   textAlign="right" />
+			<mx:ColorPicker id="ptnormalColor" width="50" height="50" selectedColor="{FlatTheme.txtnormalColor}" />
+		</s:HGroup>
+	</s:HGroup>
+	<s:HGroup width="100%" height="50">
+		<s:HGroup width="100%" height="50" verticalAlign="middle">
+			<mx:Text  width="100"  text="Color"/>
+			<mx:Text  width="100"  text="HOVER"/>
+			<s:Group width="50" height="50">
+				<s:Rect left="0" right="0" top="0" bottom="0">
+					<s:fill>
+						<s:SolidColor color="{pbhorverColor.selectedColor}"/>
+					</s:fill>
+				</s:Rect>
+				<s:RichText color="{pthorverColor.selectedColor}" horizontalCenter="0" text="Color"
+							verticalCenter="0"/>
+			</s:Group>
+			<mx:Text  width="100"  text="backgroup"   textAlign="right" />
+			<mx:ColorPicker id="pbhorverColor" width="50" height="50" selectedColor="{FlatTheme.overColor}" />
+			<mx:Text  width="100"  text="text"   textAlign="right" />
+			<mx:ColorPicker id="pthorverColor" width="50" height="50" selectedColor="{FlatTheme.txtoverColor}" />
+		</s:HGroup>
+	</s:HGroup>
+	<s:HGroup width="100%" height="50">
+		<s:HGroup width="100%" height="50" verticalAlign="middle">
+			<mx:Text  width="100"  text="Color"/>
+			<mx:Text  width="100"  text="SELECT"/>
+			<s:Group width="50" height="50">
+				<s:Rect left="0" right="0" top="0" bottom="0">
+					<s:fill>
+						<s:SolidColor color="{pbselectColor.selectedColor}"/>
+					</s:fill>
+				</s:Rect>
+				<s:RichText color="{ptselectColor.selectedColor}" horizontalCenter="0" text="Color"
+							verticalCenter="0"/>
+			</s:Group>
+			<mx:Text  width="100"  text="backgroup"   textAlign="right" />
+			<mx:ColorPicker id="pbselectColor" width="50" height="50" selectedColor="{FlatTheme.selectColor}" />
+			<mx:Text  width="100"  text="text"   textAlign="right" />
+			<mx:ColorPicker id="ptselectColor" width="50" height="50" selectedColor="{FlatTheme.txtselectColor}" />
+		</s:HGroup>
+	</s:HGroup>
+	<s:HGroup width="100%" height="50">
+		<s:HGroup width="100%" height="50" verticalAlign="middle">
+			<mx:Text  width="100"  text="Color"/>
+			<mx:Text  width="100"  text="UPSELECT"/>
+			<s:Group width="50" height="50">
+				<s:Rect left="0" right="0" top="0" bottom="0">
+					<s:fill>
+						<s:SolidColor color="{pbupselectColor.selectedColor}"/>
+					</s:fill>
+				</s:Rect>
+				<s:RichText color="{ptupselectColor.selectedColor}" horizontalCenter="0" text="Color"
+							verticalCenter="0"/>
+			</s:Group>
+			<mx:Text  width="100"  text="backgroup"   textAlign="right" />
+			<mx:ColorPicker id="pbupselectColor" width="50" height="50" selectedColor="{FlatTheme.upselect}" />
+			<mx:Text  width="100"  text="text"   textAlign="right" />
+			<mx:ColorPicker id="ptupselectColor" width="50" height="50" selectedColor="{FlatTheme.txtupselectColor}" />
+		</s:HGroup>
+	</s:HGroup>
+	<s:HGroup width="100%" height="50">
+		<s:HGroup width="100%" height="50" verticalAlign="middle">
+			<mx:Text  width="100"  text="Color"/>
+			<mx:Text  width="100"  text="OVERSELECT"/>
+			<s:Group width="50" height="50">
+				<s:Rect left="0" right="0" top="0" bottom="0">
+					<s:fill>
+						<s:SolidColor color="{pboverselectColor.selectedColor}"/>
+					</s:fill>
+				</s:Rect>
+				<s:RichText color="{ptoverselectColor.selectedColor}" horizontalCenter="0"
+							text="Color" verticalCenter="0"/>
+			</s:Group>
+			<mx:Text  width="100"  text="backgroup"   textAlign="right" />
+			<mx:ColorPicker id="pboverselectColor" width="50" height="50" selectedColor="{FlatTheme.overselect}" />
+			<mx:Text  width="100"  text="text"   textAlign="right" />
+			<mx:ColorPicker id="ptoverselectColor" width="50" height="50" selectedColor="{FlatTheme.txtoverselectColor}" />
+		</s:HGroup>
+	</s:HGroup>
+	<s:HGroup width="100%" height="50" verticalAlign="middle">
+		<mx:Text  width="100"  text="Color"/>
+		<mx:Text  width="100"  text="DOWNSELECT"/>
+		<s:Group width="50" height="50">
+			<s:Rect left="0" right="0" top="0" bottom="0">
+				<s:fill>
+					<s:SolidColor color="{pbdownselectColor.selectedColor}"/>
+				</s:fill>
+			</s:Rect>
+			<s:RichText color="{ptdownselectColor.selectedColor}" horizontalCenter="0" text="Color"
+						verticalCenter="0"/>
+		</s:Group>
+		<mx:Text  width="100"  text="backgroup"   textAlign="right" />
+		<mx:ColorPicker id="pbdownselectColor" width="50" height="50" selectedColor="{FlatTheme.downselect}" />
+		<mx:Text  width="100"  text="text"   textAlign="right" />
+		<mx:ColorPicker id="ptdownselectColor" width="50" height="50" selectedColor="{FlatTheme.txtdownselectColor}" />
+	</s:HGroup>
+	<s:TextArea id="ta" width="100%" height="121"/>
+</s:TitleWindow>

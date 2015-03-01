@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:admin="th.co.tomato.admin.*"
+		 width="100%" height="100%" creationComplete="init()">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			
+			import th.co.tomato.event.UserServiceEvent;
+			import th.co.tomato.main.MainConfig;
+			import th.co.tomato.utils.MessageAlert;
+			
+			[Bindable] public var usrEdit:UserEdit;// = new UserEdit();
+			
+			public function init():void {
+//				usrEdit = new UserEdit();
+//				getAllUser(MainConfig.getInstance.userModel.userid);
+//				getALlRoles(MainConfig.getInstance.userModel.userid);
+//				UserServiceEvent.instance.ImportType(null);
+				MainConfig.getInstance.hideProgressBar();
+				
+				viewUser.dgUser.addEventListener(MouseEvent.DOUBLE_CLICK,dguserDbClick);
+				viewUser.btnNewUser.addEventListener(MouseEvent.CLICK,NewUserClick);
+				
+			}
+			
+//			protected function getAllUser(usrid:String):void
+//			{	MainConfig.getInstance.showProgressBar();
+//				UserServiceEvent.instance.getAlluser(this);
+//			}
+			
+			
+//			protected function getALlRoles(userid:String):void
+//			{
+//				getAllroles.token = rolesService.getAll(userid);
+//			}
+//			
+//			public function getAllUsers_resultHandler (ac:ArrayCollection):void
+//			{
+//				AdminModul.getInstance.acUser = ac;	
+//				var acc:ArrayCollection = ObjectUtil.copy(ac) as ArrayCollection;
+//				var usr:User = new User();
+//				usr.userid = 'ALL';
+//				acc.addItemAt(usr,0);
+//				AdminModul.getInstance.acUserList = acc;
+//				MainConfig.getInstance.hideProgressBar();
+//			}
+			
+			public function getAllroles_resultHandler(e:ResultEvent):void
+			{
+				AdminModul.getInstance.acRole = e.result as ArrayCollection;
+			}
+			
+			
+			protected function dguserDbClick(event:MouseEvent):void
+			{
+//				if(viewUser.dgUser.selectedIndex >= 0 ){
+//					usrEdit = UserEdit(PopUpManager.createPopUp(this,UserEdit,true));
+//					usrEdit.usr = viewUser.dgUser.selectedItem as User;
+//					usrEdit.newuser = false;
+//					usrEdit.p = this;
+//					usrEdit.init();
+//				} else {
+//					Alert.show('Please Select Items befo Insert','Alert!!!');
+//				}
+				
+				
+			}
+			
+			protected function resetDefaultPass(usr:String, userid:String):void
+			{
+//				UserServiceEvent.instance.resetDefaultPass(userid,this);
+			}
+			
+			
+			
+//			public function updateItem(usrid:String, item:User):void
+//			{
+//				MainConfig.getInstance.showProgressBar();
+//				UserServiceEvent.instance.updateItem(item,this);
+//			}
+//			
+//			public function updateItemResult_resultHandler():void
+//			{
+//				MainConfig.getInstance.hideProgressBar();
+//				MessageAlert.getSuccessAlert('Update User Successed.');
+//				PopUpManager.removePopUp(usrEdit);
+//				getAllUser(MainConfig.getInstance.userModel.userid);
+//				
+//			}
+			
+			protected function NewUserClick(event:MouseEvent):void
+			{
+//				var user:User = new User();
+//				usrEdit = UserEdit(PopUpManager.createPopUp(this,UserEdit,true));
+//				usrEdit.usr = user;
+//				usrEdit.newuser = true;
+//				usrEdit.p = this;
+//				usrEdit.init();
+			}
+			
+			
+//			public function createItem(usrid:String, item:User):void
+//			{
+//				MainConfig.getInstance.showProgressBar();
+//				UserServiceEvent.instance.createItem(item,this);
+//			}
+//			
+//			public function createItemResult_resultHandler():void
+//			{
+//				MainConfig.getInstance.hideProgressBar();
+//				MessageAlert.getSuccessAlert('Insert User Successed.');
+//				PopUpManager.removePopUp(usrEdit);
+//				getAllUser(MainConfig.getInstance.userModel.userid);
+//			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+	</fx:Declarations>
+	<mx:TabNavigator id="tbnav" width="100%" height="100%" creationPolicy="all" tabWidth="150">
+		<s:NavigatorContent width="100%" height="100%" label="Users">
+			<admin:vUserList   id="viewUser"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Management">
+			<admin:SystemLogs  id="viewLogs" />
+		</s:NavigatorContent>
+	</mx:TabNavigator>
+</s:Group>

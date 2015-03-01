@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:MainClass="th.co.tomato.themes.component.MainClass.*"
+		 width="30" height="50" 
+		 creationComplete="init(event)" 
+		 >
+	<fx:Script>
+		<![CDATA[
+			import th.co.tomato.themes.FlatTheme;
+			import mx.events.FlexEvent;
+			import mx.events.SandboxMouseEvent;
+			
+			
+			[Bindable] public var iconText:String = '';
+			[Bindable] public var SelectText:String = '';
+			
+			protected function button_clickHandler():void
+			{
+				trace('btnClick');
+				if ( currentState == 'State1' ) {
+					currentState='State2';
+				} else if ( currentState == 'State2' ) {
+					currentState='State1';
+				}
+			}
+
+			protected function list_changeHandler():void
+			{
+//				iconText = list1.selectedItem.text1;
+				SelectText = list1.selectedItem.text2;
+				FlatTheme.setColor(						
+					list1.selectedItem.color,
+					list1.selectedItem.upColor,
+					list1.selectedItem.overColor,
+					list1.selectedItem.downColor,
+					list1.selectedItem.disableColor,
+					list1.selectedItem.normalColor,
+					list1.selectedItem.hoverColor,
+					list1.selectedItem.selectColor,
+					list1.selectedItem.upselect,
+					list1.selectedItem.overselect,
+					list1.selectedItem.downselect,
+					list1.selectedItem.txtColor,
+					list1.selectedItem.txtupColor,
+					list1.selectedItem.txtoverColor,
+					list1.selectedItem.txtdownColor,
+					list1.selectedItem.txtdisaColor,
+					list1.selectedItem.txtnormalColor,
+					list1.selectedItem.txthoverColor,
+					list1.selectedItem.txtselectColor, 
+					list1.selectedItem.txtupselectColor,
+					list1.selectedItem.txtoverselectColor,
+					list1.selectedItem.txtdownselectColor
+					);	
+				list1.selectedIndex = -1;
+				currentState='State1';
+				trace(SelectText);
+			}
+
+			protected function init(event:FlexEvent):void
+			{
+				systemManager.getSandboxRoot().addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+				systemManager.getSandboxRoot().addEventListener(SandboxMouseEvent.MOUSE_DOWN_SOMEWHERE, onMouseDown);
+			}
+			
+			protected function onMouseDown(event:Event):void
+			{
+				var idd:String = '';
+				if(Object(event.target).hasOwnProperty('id')){
+					idd = Object(event.target).id;
+				}
+				
+				if(event.target == myIconbtn || event.target == this || idd == "ColorGroup" ){
+				trace('onMouseDown =');
+	
+				} else {
+				trace('onMouseDown  !=',currentState);
+					if(currentState != 'State1'){
+						currentState='State1';
+						validateDisplayList();
+						trace('after change= ',currentState);
+					}
+				}
+			}	
+			
+		]]>
+
+	</fx:Script>
+	<s:states>
+		<s:State name="State1"/>
+		<s:State name="State2"/>
+	</s:states>
+	
+	<s:PopUpAnchor includeIn="State2" right="1" top="50" width="225" height="245"
+				   visible.State1="false" x.State1="0" y.State1="38" displayPopUp.State1="false"
+				   top.State2="49" displayPopUp.State2="true">
+	<s:Group  width.State2="100%" height.State2="100%" id="MainG">
+	<s:Rect top="0" left="0" right="0" bottom="-2">
+		<s:fill.State2>
+			<s:SolidColor color.State2="0xFFFFFF" />
+		</s:fill.State2>
+		<s:stroke>
+			<s:SolidColorStroke color="{FlatTheme.upColor}" weight="1" />
+		</s:stroke>
+	</s:Rect>		
+	<mx:Text text="Predefined colors" horizontalCenter="0" top="10" />
+	<s:List id="list1" left="0" right="1" top="35" bottom="1" change="list_changeHandler()"
+			skinClass="th.co.tomato.themes.component.ColorBtn.DataListColorSkin">
+		<s:ArrayCollection>
+			<fx:Object text1="a" text2="1ABC9C" color = "1ABC9C" upColor = "1ABC9C" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="b" text2="2ECC71" color = "2ECC71" upColor = "2ECC71" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="b" text2="3498DB" color = "3498DB" upColor = "3498DB" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="b" text2="9B59B6" color = "9B59B6" upColor = "9B59B6" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="b" text2="34495E" color = "34495E" upColor = "34495E" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="b" text2="F1C40F" color = "F1C40F" upColor = "F1C40F" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="c" text2="E67E22" color = "E67E22" upColor = "E67E22" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="d" text2="E74C3C" color = "E74C3C" upColor = "E74C3C" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="e" text2="ECF0F1" color = "ECF0F1" upColor = "ECF0F1" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="f" text2="95A5A6" color = "95A5A6" upColor = "95A5A6" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="f" text2="95A5A6" color = "95A5A6" upColor = "95A5A6" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="f" text2="95A5A6" color = "95A5A6" upColor = "95A5A6" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="f" text2="95A5A6" color = "95A5A6" upColor = "95A5A6" overColor = "005580" downColor = "005580" disableColor = "b1b1b1"  normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="a" text2="3498DB" color = "3498DB" upColor = "3498DB" overColor = "5580" downColor = "5580" disableColor = "B1B1B1" normalColor = "3498DB" hoverColor = "5580" selectColor = "5580"  upselect = "5580"  overselect = "5580" downselect = "5580"  txtColor = "000000" txtupColor = "FFFFFF" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+			<fx:Object text1="a" text2="1ABC9C" color = "1ABC9C" upColor = "1ABC9C" overColor = "9999" downColor = "9999" disableColor = "CCCCCC" normalColor = "9999" hoverColor = "1ABC9C" selectColor = "9999"  upselect = "9999"  overselect = "9999" downselect = "9999"  txtColor = "0" txtupColor = "0" txtoverColor = "FFFFFF" txtdownColor = "FFFFFF"  txtdisaColor = "0"  txtnormalColor = "FFFFFF"  txthoverColor = "FFFFFF"  txtselectColor = "FFFFFF" txtupselectColor = "FFFFFF"  txtoverselectColor = "FFFFFF"  txtdownselectColor = "FFFFFF"  />
+		</s:ArrayCollection>
+	</s:List>
+	</s:Group>	
+	</s:PopUpAnchor>
+	
+	<MainClass:MyIconBtn y="0" right="0" width="30" click="button_clickHandler()" iconText="{iconText}"
+					 skinClass="th.co.tomato.themes.component.ColorBtn.ButtonColorSkin" id="myIconbtn"
+					 />
+</s:Group>

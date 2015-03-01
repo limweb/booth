@@ -1,0 +1,232 @@
+
+<model xmlns="http://ns.adobe.com/Fiber/1.0">
+  <annotation name="ActionScriptGeneration">
+    <item name="FullyQualifyReferences">true</item>
+  </annotation>
+  <service name="DepositslipService">
+    <annotation name="ActionScriptGeneration">
+      <item name="Source">DepositslipService</item>
+      <item name="ServiceType">RemoteObject</item>
+      <item name="Package">services.depositslipservice</item>
+      <item name="Endpoint">http://127.0.0.1/sqlserver/gateway.php</item>
+      <item name="Destination">DepositslipService</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">PHP</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="PHP_RELATIVE_LOCATION">services/DepositslipService.php</item>
+      <item name="PHP_SERVER_ROOT">d:\xampp\htdocs</item>
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="PHP_SERVICES_FOLDER">C:\ERP\PILOKSERVER\sqlserver\services</item>
+      <item name="PHP_LOCATION">d:/xampp/htdocs/services/DepositslipService.php</item>
+      <item name="LINKED_FILE">DepositslipService.php</item>
+      <item name="PHP_SERVER_ROOT_URL">http://127.0.0.1/</item>
+      <item name="ABSOLUTE_ENDPOINT">http://127.0.0.1/sqlserver/gateway.php</item>
+      <item name="PHP_CLASS_NAME">DepositslipService</item>
+    </annotation>
+    <function name="getbydate" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="date" type="opaque"/>
+      <parameter name="y" type="integer"/>
+    </function>
+    <function name="updatebydate" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="obj" type="opaque"/>
+    </function>
+    <function name="delbyid" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="getDate" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="test" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="obj" type="opaque"/>
+    </function>
+    <function name="getApplog" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParamNames">search</item>
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="search" type="opaque"/>
+    </function>
+    <function name="getLogbydate" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="date" type="opaque"/>
+    </function>
+    <function name="genpdf" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="date" type="opaque"/>
+    </function>
+  </service>
+  <service name="UsersService">
+    <annotation name="ActionScriptGeneration">
+      <item name="Source">UsersService</item>
+      <item name="ServiceType">RemoteObject</item>
+      <item name="Package">services.usersservice</item>
+      <item name="Endpoint">http://127.0.0.1/FlexPrototype/gateway.php</item>
+      <item name="Destination">UsersService</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">PHP</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="PHP_RELATIVE_LOCATION">SQLSERVER/services/UsersService.php</item>
+      <item name="PHP_SERVER_ROOT">d:/xampp/htdocs</item>
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="PHP_SERVICES_FOLDER">d:/xampp/htdocs/FlexPrototype/services</item>
+      <item name="PHP_LOCATION">D:/xampp/htdocs/SQLSERVER/services/UsersService.php</item>
+      <item name="LINKED_FILE">UsersService.php</item>
+      <item name="PHP_SERVER_ROOT_URL">http://127.0.0.1/</item>
+      <item name="ABSOLUTE_ENDPOINT">http://127.0.0.1/FlexPrototype/gateway.php</item>
+      <item name="PHP_CLASS_NAME">UsersService</item>
+    </annotation>
+    <function name="register" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="user" type="opaque"/>
+    </function>
+    <function name="login" return-type="Userlogin">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="ValidProperties">
+        <item name="propertySpecifier">id,username,status,role</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="user" type="opaque"/>
+    </function>
+    <function name="deluser" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="id" type="opaque"/>
+    </function>
+    <function name="updateuser" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="user" type="opaque"/>
+    </function>
+    <function name="getusers" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="getuserbyid" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="id" type="opaque"/>
+    </function>
+    <function name="changepass" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="obj" type="opaque"/>
+    </function>
+    <function name="resetpass" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="id" type="opaque"/>
+    </function>
+  </service>
+  <entity name="Userlogin">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">Userlogin</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">UsersService,UsersServiceDummy</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="login">
+      <item name="propertySpecifier">id,username,status,role</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="string" required="true"/>
+    <property name="username" type="string" required="true"/>
+    <property name="status" type="string" required="true"/>
+    <property name="role" type="string" required="true"/>
+  </entity>
+</model>

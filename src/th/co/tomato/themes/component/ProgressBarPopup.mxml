@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="392" height="162"
+		>
+	<s:Rect width="309" height="100" horizontalCenter="0" verticalCenter="2">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry alpha="1.0" color="#70CAE9" ratio="0"/>
+				<s:GradientEntry alpha="1.0" color="#70CAE9" ratio="0.30196078431372547"/>
+				<s:GradientEntry alpha="1.0" color="#70CAE9" ratio="0.5333333333333333"/>
+				<s:GradientEntry alpha="1.0" color="#FFFFFF" ratio="1"/>
+			</s:LinearGradient>
+		</s:fill>
+		<s:stroke>
+			<s:SolidColorStroke color="#70CAE9"  />
+		</s:stroke>
+	</s:Rect>
+	
+	<mx:ApplicationControlBar width="310" height="103" horizontalCenter="0" styleName="progressBar"
+							  verticalCenter="0" verticalAlign="middle" horizontalAlign="center">
+<!--		<mx:ProgressBar label="Loading...."  id="progress"
+						indeterminate="true"/>-->
+	</mx:ApplicationControlBar>
+	<s:Label x="50" y="36" text="Loading...."/>
+	<s:SWFLoader width="142" height="142" autoLoad="true" horizontalCenter="0" scaleContent="false"
+				 source="assets/loading/loading1.swf" verticalCenter="0"/>
+</s:Group>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:usersservice="services.usersservice.*"
+			   width="382" height="248" title="Change Password"
+			   close="closepopup()"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			
+			import th.co.tomato.main.MainConfig;
+			import th.co.tomato.utils.MessageAlert;
+			protected function button1_clickHandler(event:MouseEvent):void
+			{	
+				var o:Object = new Object();
+				o.id = MainConfig.getInstance.userlogin.id;
+				o.newpassword = txtpassnew.text;
+				o.oldpassword = txtpassold.text;
+				changepass(o);
+				
+			}
+			
+			private function closepopup():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function changepass(obj:Object):void
+			{
+				changepassResult.token = usersService.changepass(obj);
+			}
+			
+			protected function changepassResult_resultHandler(event:ResultEvent):void
+			{
+				if( event.result == -1 ){
+					MessageAlert.getErrorAlert('Can not change password');
+				} else {
+					MessageAlert.getSuccessAlert('Change password successed.');
+					closepopup();
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:CallResponder id="changepassResult" result="changepassResult_resultHandler(event)"/>
+		<usersservice:UsersService id="usersService"
+								   fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+								   showBusyCursor="true"/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Form x="10" y="10" width="345" height="128">
+		<s:FormItem label="old password:" required="true">
+			<s:TextInput id="txtpassold" displayAsPassword="true" />
+		</s:FormItem>
+		<s:FormItem label="new Password:" required="true">
+			<s:TextInput id="txtpassnew" displayAsPassword="true"/>
+		</s:FormItem>
+	</s:Form>
+	<s:Button x="268" y="152" label="Changepass" click="button1_clickHandler(event)"/>
+</s:TitleWindow>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			
+			import th.co.tomato.event.UserServiceEvent;
+			import th.co.tomato.main.MainConfig;
+			import th.co.tomato.utils.MessageAlert;
+
+			protected function Clear(event:MouseEvent):void
+			{
+				cmbImptype.selectedIndex  = 0;
+				cmbUserlist.selectedIndex = 0;
+				dfEnd.selectedDate = null;
+				dfStart.selectedDate = null;
+			}
+			
+			protected function btnDel_clickHandler(event:MouseEvent):void
+			{
+				if(validate()){
+					MessageAlert.getConfirmAlertListener('Are You sure want to Delete ?',function(e:CloseEvent):void {
+					
+						if(e.detail == Alert.YES){
+							var sl:SearchLog = new SearchLog();
+							if(cmbImptype.selectedIndex == 0 ){
+								sl.types = null;
+							} else {
+								sl.types = cmbImptype.selectedItem.types;
+							}
+							
+							if(cmbUserlist.selectedIndex == 0 ){
+								sl.userid = null;
+							} else {
+								sl.userid = cmbUserlist.selectedItem.userid;
+							}
+							sl.sdate = dfStart.text;
+							sl.edate = dfEnd.text;
+								
+//							UserServiceEvent.instance.deleteLogs(sl);
+						}
+					});
+				}
+			}
+			
+			private function validate():Boolean {
+				var chk:Boolean = true;
+				
+				if(dfStart.text == '') {
+					chk = false;
+				}
+				
+				if(dfEnd.text == ''){
+					chk = false;
+				}
+				if(!chk){
+					MessageAlert.getWarningAlert('Pleay Fill Date for Delete');
+				}
+				return chk;	
+			}
+			
+			
+			protected function btnSearch_clickHandler(event:MouseEvent):void
+			{
+				var sl:SearchLog = new SearchLog();
+				if(cmbImptype.selectedIndex == 0 ){
+					sl.types = null;
+				} else {
+					sl.types = cmbImptype.selectedItem.types;
+				}
+				
+				if(cmbUserlist.selectedIndex == 0 ){
+					sl.userid = null;
+				} else {
+					sl.userid = cmbUserlist.selectedItem.userid;
+				}
+				
+				if(dfStart.text == ''){
+					sl.sdate = null;
+				} else {
+					sl.sdate = dfStart.text;
+				}
+				
+				if(dfEnd.text == ''){
+					sl.edate = null;
+				} else {
+					sl.edate = dfEnd.text;
+				}
+				
+				
+//				Alert.show(ObjectUtil.toString(sl));
+				MainConfig.getInstance.showProgressBar();
+//				UserServiceEvent.instance.searchLogs(sl,this);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:layout>
+		<s:VerticalLayout paddingBottom="10" paddingLeft="10" paddingRight="10" />
+	</s:layout>
+	<s:HGroup  verticalAlign="middle" horizontalAlign="right" width="100%">
+		<mx:Text text="Type:" />
+		<mx:ComboBox labelField="types" id="cmbImptype" dataProvider="{AdminModul.getInstance.acImpType}" />
+		<mx:Text text="User:" />
+		<mx:ComboBox id="cmbUserlist" labelField="userid" dataProvider="{AdminModul.getInstance.acUserList}" />
+		<s:Label text="Start Date:" />
+		<mx:DateField  id="dfStart" formatString="YYYY-MM-DD"/>
+		<s:Label text="End Date:" />
+		<mx:DateField  id="dfEnd" formatString="YYYY-MM-DD" selectableRange="{{rangeStart:dfStart.selectedDate}}"  />
+		<s:Button label="Search"  id="btnSearch" click="btnSearch_clickHandler(event)"/>
+		<s:Button label="Clear" click="Clear(event)" id="btnclear"/>
+		<s:Button label="Del Logs" id="btnDel" click="btnDel_clickHandler(event)" />
+	</s:HGroup>
+	<mx:AdvancedDataGrid width="100%" height="100%" 
+						 dataProvider="{AdminModul.getInstance.acLogs}"
+						 variableRowHeight="true">
+		<mx:columns>
+			<mx:AdvancedDataGridColumn  dataField="log_id" headerText="ID" width="60" />
+			<mx:AdvancedDataGridColumn  dataField="log_date" headerText="Date"  width="120" />
+			<mx:AdvancedDataGridColumn  dataField="types" headerText="Type" width="100"  />
+			<mx:AdvancedDataGridColumn  dataField="message" headerText="Message" />
+			<mx:AdvancedDataGridColumn  dataField="module" headerText="Module"  width="80"  />
+			<mx:AdvancedDataGridColumn  dataField="parametor" headerText="Parametor" width="60"  />
+			<mx:AdvancedDataGridColumn  dataField="userid" headerText="UserId" width="80"  />
+		</mx:columns>
+		
+	</mx:AdvancedDataGrid>
+</s:Group>

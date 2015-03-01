@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	width="100%"
+	autoDrawBackground="false" 
+	click="itemrenderer1_clickHandler(event)"
+	>
+	
+	<fx:Script>
+		<![CDATA[
+			import th.co.tomato.themes.FlatTheme;
+			import th.co.tomato.samples.data.MyObj;
+			import th.co.tomato.samples.data.MyObjFlattenedList;
+			
+			import flash.text.engine.LigatureLevel;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			
+			import spark.components.List;
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable] private var _obj:MyObj;
+			[Bindable] private var _depth:int = 0;
+			[Bindable] private var _isFiltered:Boolean = false;
+			[Bindable] private var _hasChildren:Boolean = false;
+			
+			private var _list:MyObjFlattenedList;
+			
+			override public function set data(val:Object):void {
+				super.data = val;
+				
+				if (val != null) {
+					_obj = val as MyObj;
+					
+					var ownerList:List = owner as List;
+					_list = ownerList.dataProvider as MyObjFlattenedList;
+					
+					btn.selected = _list.isItemOpen(_obj);
+					_depth = _list.getItemDepth(_obj);
+
+					_isFiltered = _list.isFiltered;
+					_hasChildren = (_obj.children != null && _obj.children.length > 0);
+				}
+			}
+			
+			protected function itemrenderer1_clickHandler(event:MouseEvent):void
+			{
+				if(_depth >= 2 ){
+					
+				} else {
+					 trace('click',_obj.name);
+					 btn.selected = !btn.selected;
+					 if (btn.selected) {
+						 _list.openItem(_obj);
+					 } else {
+						 _list.closeItem(_obj);
+					 }
+					 
+					 if(!_hasChildren && !_isFiltered ) {
+						 Alert.show('Open :'+_obj.name,'Alert');
+					 }
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0" height="36">
+		<s:fill>
+			<s:SolidColor color="{(this.itemIndex % 2 == 0 ? 0xfbfbfb : 0xf2f2f2 )}"
+						  color.hovered="{FlatTheme.upColor}"
+						  color.selected="{FlatTheme.downColor}" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup left="{_depth * 10 + (_isFiltered ? 8 : -2)}" right="2" top="1" bottom="1" gap="5" verticalAlign="middle">
+		<s:ToggleButton id="btn"
+						visible="{_hasChildren &amp;&amp; !_isFiltered &amp;&amp; _depth &lt; 2 }"
+						includeInLayout="{_hasChildren &amp;&amp; !_isFiltered}" />
+		
+		<s:Group id="dot" width="14" height="14"
+				 visible="{!_hasChildren &amp;&amp; !_isFiltered}"
+				 includeInLayout="{!_hasChildren &amp;&amp; !_isFiltered}">
+			<s:RichText text="{(_isFiltered ? _obj.icontxt : (_depth == 1 ? _obj.icontxt.toUpperCase() : _obj.icontxt) )}"  fontSize="14" fontFamily="myiconfont" 
+						
+						color="{FlatTheme.upColor}" color.hovered="{FlatTheme.txtoverColor}" color.selected="{FlatTheme.txtdownColor}"
+						/>
+		</s:Group>
+		
+		<s:Label width="100%"
+				 color="#333333" color.selected="#ffffff"
+				 fontSize="{18 - (_depth * 2)}" textAlign="left"
+				 text="{(_isFiltered ? _obj.name : (_depth == 1 ? _obj.name.toUpperCase() : _obj.name) )}"
+				 maxDisplayedLines="1" />
+		<s:ToggleButton id="btn1"
+						visible="{_hasChildren &amp;&amp; !_isFiltered &amp;&amp; _depth &gt;= 2 }"
+						includeInLayout="{_hasChildren &amp;&amp; !_isFiltered}" />
+	</s:HGroup>
+</s:ItemRenderer>

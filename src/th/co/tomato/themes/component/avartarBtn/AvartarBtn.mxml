@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:graphics="assets.graphics.*"
+		 height="153" minWidth="100" creationComplete="init(event)"
+		 width.State1="122">
+	<fx:Script>
+		<![CDATA[
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.events.SandboxMouseEvent;
+			import mx.managers.PopUpManager;
+			
+			import th.co.tomato.deposit.Changepass;
+			import th.co.tomato.main.MainConfig;
+			import th.co.tomato.themes.FlatTheme;
+			
+			protected function button_clickHandler():void
+			{
+				if ( currentState == 'State1' ) {
+					currentState='State2';
+				} else {
+					currentState='State1';
+				}
+			}
+
+			protected function list_changeHandler():void
+			{
+				if(lst.selectedItem == 'Sing Out' ){
+					FlexGlobals.topLevelApplication.logout();
+					FlatTheme.v = false;
+				} else if(lst.selectedItem == 'Change Password'){
+					var changepass:Changepass = PopUpManager.createPopUp(FlexGlobals.topLevelApplication as DisplayObject,Changepass,true) as Changepass;
+					PopUpManager.centerPopUp(changepass);
+				}
+				
+				lst.selectedItem = null;
+				currentState='State1';
+				
+			}
+
+			protected function init(event:FlexEvent):void
+			{
+				systemManager.getSandboxRoot().addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+				systemManager.getSandboxRoot().addEventListener(SandboxMouseEvent.MOUSE_DOWN_SOMEWHERE, onMouseDown);
+			}
+			
+			protected function onMouseDown(event:Event):void
+			{				
+				var idd:String = '';
+				if(Object(event.target).hasOwnProperty('id')){
+					idd = Object(event.target).id;
+				}
+				
+				if(event.target == btnavatar || event.target == this || idd == "itemGroup" ){
+					trace('onMouseDown =');
+					
+				} else {
+					trace('onMouseDown  !=',currentState);
+					if(currentState != 'State1'){
+						currentState='State1';
+						validateDisplayList();
+						trace('after change= ',currentState);
+					}
+				}
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="State1"/>
+		<s:State name="State2"/>
+	</s:states>
+	<s:Button click="button_clickHandler()" skinClass="th.co.tomato.themes.component.avartarBtn.AvartarButtonSkin" 
+			  left="0" right="0" top="0" id="btnavatar" label="{MainConfig.getInstance.userModel.name}"
+			  />
+	<s:PopUpAnchor includeIn="State2" left="{-(168 - btnavatar.width) }" right="0" top="49" bottom="3" width="168"
+				   displayPopUp.State1="false"
+				   displayPopUp.State2="true">
+		<s:Group width="168" height="100%" >
+		<s:Rect includeIn="State2" top="0" left="0" right="0" bottom="0">
+			<s:stroke>
+				<s:SolidColorStroke caps="none" color="{FlatTheme.upColor}" joints="miter" miterLimit="4" weight="2"/>
+			</s:stroke>
+			<s:fill>
+				<s:SolidColor color="#FFFFFF"/>
+			</s:fill>
+		</s:Rect>
+		<s:List  change="list_changeHandler()" top="1" left="1" right="1" bottom="1" 
+				skinClass="th.co.tomato.themes.component.avartarBtn.AvartarDataListSkin" id="lst">
+			<s:ArrayCollection>
+				<fx:String>Change Password</fx:String>
+				<fx:String>---------------------</fx:String>
+				<fx:String>Sing Out</fx:String>
+			</s:ArrayCollection>
+		</s:List>
+		</s:Group>
+	</s:PopUpAnchor>
+	
+	
+	
+</s:Group>

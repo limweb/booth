@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		width="{hostComponent.width}" height="{hostComponent.height}" 
+		xmlns:graphics="assets.graphics.*"
+		creationComplete="init(event)"
+		minHeight="43" minWidth="43"
+		>
+	<fx:Metadata>[HostComponent("spark.components.Button")]</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import th.co.tomato.themes.FlatTheme;
+			import mx.events.FlexEvent;
+			
+			protected function init(event:FlexEvent):void
+			{
+				hostComponent.addEventListener(MouseEvent.CLICK,function():void {
+					Sequence1.play();
+				});
+			}			
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:Parallel id="Sequence1">
+			<s:Parallel target="{labelDisplay}">
+				<s:Animate duration="1450">
+					<s:SimpleMotionPath property="rotation" valueBy="360"/>
+				</s:Animate>
+			</s:Parallel>
+		</s:Parallel>
+	</fx:Declarations>
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="over"/>
+		<s:State name="down"/>
+		<s:State name="disabled"/>
+	</s:states>
+	<s:Rect x="0" y="0" top="0" left="0" right="0" bottom="0" >
+		<s:fill>
+			<s:SolidColor 
+				color.up="{FlatTheme.upColor}"
+				color.over="0xFFFFFF"
+				color.down="0xFFFFFF"
+				/>
+			<!--				color.over="#2980B9"-->
+		</s:fill>
+	</s:Rect>
+	<s:RichText id="labelDisplay" horizontalCenter="0" verticalCenter="0"  color.down="0x000000" fontFamily="myiconfont"
+				fontSize="21" tabStops="S0 S50" color.up="0xFFFFFF" color.over="0x000000"
+				/>
+	<!--	<graphics:Graphic1 id="graphic11"  transformX="10.5"
+	transformY="10.5" 
+	horizontalCenter="0" verticalCenter="0"/>
+--></s:Skin>

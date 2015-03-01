@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:MXAdvancedDataGridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+								  xmlns:s="library://ns.adobe.com/flex/spark" 
+								  xmlns:mx="library://ns.adobe.com/flex/mx" 
+								  focusEnabled="true">
+	<fx:Script>
+		<![CDATA[
+			
+			override public function set data(value:Object):void
+			{
+				// TODO Auto Generated method stub
+				super.data = value;
+				if(value){
+					if(value.status ==1){
+						lblstatus.text = 'Active';
+					} else {
+						lblstatus.text = 'Inactive';
+					}
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<s:Label id="lblstatus" top="0" left="0" right="0" bottom="0" text="{listData.label}" />
+</s:MXAdvancedDataGridItemRenderer>

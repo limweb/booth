@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+		 creationComplete="CurrentDateTimeString()"
+		 rollOver="RollOver(event)"
+		 mouseMove="RollOver(event)"
+		 rollOut="RollOut(event)"
+		 click="group1_clickHandler(event)"
+		 >
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.DateField;
+			import mx.core.FlexGlobals;
+			
+			import org.osmf.events.TimeEvent;
+			
+			import th.co.tomato.themes.FlatTheme;
+			[Bindable] private var DateString:String ='';
+			private var timer:Timer = new Timer(1000);
+			
+			protected function login(event:MouseEvent):void
+			{
+//				timer.stop();
+//				FlexGlobals.topLevelApplication.vsChange();
+			}
+			
+			public function ClearData():void {
+				timer.start();
+//				frmLogin.visible = false;
+				txtName.text = '';
+				txtPass.text = '';
+				FlatTheme.v  = false;
+			}
+			
+			private function CurrentDateTimeString():void
+			{
+				timer.addEventListener(TimerEvent.TIMER, switchImage);
+				timer.start();
+			}
+			
+			private function switchImage(event:TimerEvent):void{
+				var CurrentDateTime:Date = new Date();
+				DateString = DateDisplay.format(CurrentDateTime);
+			}
+			
+			
+			protected function RollOver(event:MouseEvent):void
+			{
+//				frmLogin.visible = true;
+//				if(!frmLogin.visible){
+//					txtName.setFocus();
+//				}
+				
+			}
+			
+			
+			protected function RollOut(event:MouseEvent):void
+			{
+//				frmLogin.visible = false;
+			}
+			
+			protected function group1_clickHandler(event:MouseEvent):void
+			{
+				login(null);
+			}
+			
+//			<s:Rect width="100%" height="100%">
+//				<s:fill>
+//				  <s:SolidColor color="{getStyle('backgroundColor')}"
+//								color.over="{ColorUtil.adjustBrightness2(getStyle('backgroundColor'), 64)}"
+//								color.down="{ColorUtil.adjustBrightness2(getStyle('backgroundColor'), -32)}"
+//				  />
+//				</s:fill>
+//			  </s:Rect>
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<mx:DateFormatter id="DateDisplay" formatString="'EEE, D MMM YYYY HH:NN:SS"/>
+	</fx:Declarations>
+	<s:Rect top="0" left="0" right="0" bottom="0">
+		<s:stroke>
+			<s:SolidColorStroke caps="none" color="#5C5C5C" joints="miter" miterLimit="4"
+								weight="1"/>
+		</s:stroke>
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry alpha="1.0" color="#6FC9FF" ratio="0"/>
+				<s:GradientEntry alpha="1.0" color="#0065FF" ratio="1"/>				
+<!--				<s:GradientEntry alpha="1.0" color="{getStyle('aaa')}" ratio="0"/>
+				<s:GradientEntry alpha="1.0" color="{getStyle('bbb')}" ratio="1"/>-->
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Form right="40" bottom="40" defaultButton="{btnLogin}" horizontalCenter="0" id="frmLogin"
+			visible="false"
+			verticalCenter="0">
+		<s:TextInput prompt="User Name" id="txtName"/>
+		<s:TextInput prompt="Password" displayAsPassword="true" id="txtPass" />
+		<s:HGroup width="100%" horizontalAlign="right">
+			<s:Button id="btnLogin" label="Login" click="login(event)"/>
+		</s:HGroup>
+	</s:Form> 
+	<s:RichText left="45" bottom="45" color="#FFFFFF" fontFamily="Broadway" fontSize="50"
+				tabStops="S0 S50 S100 S150 S200" text="{DateString}">
+		<s:filters>
+			<s:DropShadowFilter alpha="0.5" angle="45.0" blurX="4.0" blurY="4.0" color="#000000"
+								distance="4.0" hideObject="false" inner="false" knockout="false"
+								quality="2" strength="1"/>
+		</s:filters>
+	</s:RichText>
+	<s:Image left="81" top="61" source="assets/logo.png"/>
+</s:Group>

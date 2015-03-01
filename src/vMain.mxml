@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+			   xmlns:fc="http://ns.adobe.com/flashcatalyst/2009"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:components="components.*"
+			   xmlns:BtnListSelect="th.co.tomato.themes.component.BtnListSelect.*" 
+			   xmlns:MainClass="th.co.tomato.themes.component.MainClass.*" 
+			   xmlns:twostatebtn="th.co.tomato.themes.component.twostatebtn.*" 
+			   xmlns:searchtextinput="th.co.tomato.themes.component.searchtextinput.*" 
+			   xmlns:notification="th.co.tomato.themes.component.notification.*" 
+			   xmlns:leftmenu="th.co.tomato.themes.component.leftmenu.*" 
+			   xmlns:customtheme="th.co.tomato.themes.component.customtheme.*" 
+			   xmlns:sampleview="th.co.tomato.themes.component.sampleview.*" 
+			   xmlns:ColorBtn="th.co.tomato.themes.component.ColorBtn.*" 
+			   width="100%" height="100%" 
+			   xmlns:avartarBtn="th.co.tomato.themes.component.avartarBtn.*" 
+			   xmlns:deposit="th.co.tomato.deposit.*" 
+			   xmlns:admin="th.co.tomato.admin.*"
+			   >
+	<s:layout>
+		<s:VerticalLayout gap="0" />
+	</s:layout>
+	<fx:Style source="Main1.css"/>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.ResizeEvent;
+			
+			import th.co.tomato.main.MainConfig;
+			import th.co.tomato.themes.FlatTheme;
+			
+//			   xmlns:ColorBtn="th.co.tomato.themes.component.ColorBtn.*" 
+//			   xmlns:avartarBtn="th.co.tomato.themes.component.avartarBtn.*"
+			
+			[Bindable] private var colAwidth:Number = 50;
+			[Bindable] private var colBwidth:Number = 75;
+			[Bindable] private var rightboxRight:Object;
+			
+			
+			protected function twoBtn_clickHandler(event:MouseEvent):void
+			{
+				
+			}
+			
+			protected function twostatebtn1_clickHandler(event:MouseEvent):void
+			{
+			}
+			
+			protected function searchtextinput1_TXTSEARCHHandler(event:Event):void
+			{
+				trace('btnSearch Click');
+			}
+			
+			protected function menuGroupWidth(event:MouseEvent):void
+			{
+			}
+			
+			public function initMain():void
+			{
+					FlatTheme.v = true;
+					vs.selectedIndex = 0;
+					list1.dataProvider = null;
+					list1.dataProvider = menu;
+					menu.refresh();
+					validateProperties();
+					validateDisplayList();
+					validateNow();
+			}
+			
+			private var chk:Boolean = false;
+			
+			protected function list1_clickHandler(event:MouseEvent):void
+			{	
+				if( list1.selectedItem != undefined ) {
+					FlatTheme.selected = true;
+					if(list1.selectedIndex == 2  ){
+						if(MainConfig.getInstance.userModel.Rolls('Admin')){
+							vs.selectedIndex = list1.selectedItem.val;
+						}
+					} else {
+						vs.selectedIndex = list1.selectedItem.val;
+					}
+				}
+			}
+			
+			protected function list1_resizeHandler(event:ResizeEvent):void
+			{
+			}
+			
+			protected function rightBoxclickHandler(event:MouseEvent):void
+			{
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:ArrayCollection id="ac3">
+			<fx:Object name="a"  age = "1" email="a@abc.com" />
+			<fx:Object name="b"  age = "2" email="b@abc.com" />
+			<fx:Object name="c"  age = "3" email="c@abc.com" />
+			<fx:Object name="d"  age = "4" email="d@abc.com" />
+			<fx:Object name="e"  age = "5" email="e@abc.com" />
+			<fx:Object name="f"  age = "6" email="f@abc.com" />
+			<fx:Object name="g"  age = "7" email="g@abc.com" />
+			<fx:Object name="h"  age = "8" email="h@abc.com" />
+			<fx:Object name="i"  age = "9" email="i@abc.com" />
+		</s:ArrayCollection>
+		
+		<s:ArrayCollection id="ac2">
+			<fx:Object text1="a" text2="English"/>
+			<fx:Object text1="b" text2="Thai"/>
+			<fx:Object text1="c" text2="Chinese"/>
+			<fx:Object text1="d" text2="Japanese"/>
+		</s:ArrayCollection>
+		<s:ArrayCollection id="ac1">
+			<fx:String>Notifice 1</fx:String>
+			<fx:String>Notifice 2</fx:String>
+			<fx:String>Notifice 3</fx:String>
+			<fx:String>Notifice 4</fx:String>
+			<fx:String>Notifice 5</fx:String>
+			<fx:String>Notifice 6</fx:String>
+			<fx:String>Notifice 7</fx:String>
+			<fx:String>Notifice 8</fx:String>
+			<fx:String>Notifice 9</fx:String>
+			<fx:String>Notifice 10</fx:String>
+			<fx:String>Notifice 11</fx:String>
+		</s:ArrayCollection>
+		
+		<s:ArrayCollection id="acDetail">
+			<fx:Object label = "bbbb1" />
+			<fx:Object label = "bbbb2" />
+			<fx:Object label = "bbbb3" />
+			<fx:Object label = "bbbb4" />
+			<fx:Object label = "bbbb5" />
+			<fx:Object label = "bbbb6" />
+			<fx:Object label = "bbbb7" />
+			<fx:Object label = "bbbb8" />
+			<fx:Object label = "bbbb9" />
+			<fx:Object label = "bbbb0" />
+		</s:ArrayCollection>
+		
+		<s:ArrayCollection id="acmenuItem">
+			<fx:Object label = "สิ นค้าเข้า" image1="Z"   text1="สิ นค้าเข้า" hit="1" A="A"    children ="[]"	   />
+			<fx:Object label = "สินค้าออก" image1="X"   text1="สินค้าออก" hit="1" A="A"    children ="[]"	   />
+			<fx:Object label = "โอนย้ายระหว่างคลัง" image1="Y"   text1="โอนย้ายระหว่างคลัง" hit="1" A="A"    children ="[]"	   />
+			<fx:Object label = "ปรับปรุงย่อด" image1="W"   text1="ปรับปรุงย่อด" hit="1" A="A"    children ="[]"	   />
+			<fx:Object label = "เพิ่มสินค้า" image1="Q"   text1="เพิ่มสินค้า" hit="1" A="A"    children ="[]"	   />
+			<fx:Object label = "ลดสินค้า" image1="R"   text1="ลดสินค้า" hit="1" A="A"    children ="[]"	   />
+			
+		</s:ArrayCollection>
+		
+		<s:ArrayCollection id="menu"  >
+			<fx:Object image1="B"
+					   text1=" New Deposit Slip" hit="1" A="Main" val="0" role="user"
+					   />
+			<fx:Object image1="A"
+					   text1=" Deposit slips" hit="2" A="A" val="1" role="user"
+					   />
+<!--			<fx:Object image1="E"
+					   text1="Report" hit="3" A="A" val="2" role="user"
+					   />-->
+			<fx:Object image1="C" 
+					   text1="Admin/Config" hit="4" A="C"  val="3" role="Admin"
+					   />
+		</s:ArrayCollection>
+		
+		<mx:Resize id="rsz"   />
+		<mx:Move id="mv" />
+	</fx:Declarations>
+	<s:Group width="100%" height="50">
+		<s:Rect top="0" left="0" right="0" bottom="0" >
+			<s:fill>
+				<s:SolidColor color="{FlatTheme.upColor}" />
+			</s:fill>
+		</s:Rect>
+	<s:HGroup width="100%" height="50" verticalAlign="middle" paddingRight="10" paddingLeft="0" gap="0" >
+		<s:HGroup horizontalAlign="center" verticalAlign="middle" width="150" >
+			<s:Image source="assets/logo.png"/>
+			<s:Label text="LOGO" color="0xFFFFFF" fontSize="20"  />
+		</s:HGroup>
+		<s:Group width="50" height="50">
+			<s:Spacer width="10" />
+		</s:Group>
+	
+		<s:List id="list1" width="100%" height="50" click="list1_clickHandler(event)"
+				resizeEffect="{rsz}" minWidth="100" 
+				dataProvider="{menu}"
+				skinClass="th.co.tomato.themes.component.topmenu.topDataListSkin" 
+				verticalScrollPolicy="auto">
+		</s:List>
+		<avartarBtn:AvartarBtn id="customcomponent11" width="124" height="50"/>
+	</s:HGroup>
+	</s:Group>
+	<s:Group width="100%" height="100%" >
+	<s:HGroup width="100%" height="100%" id="MiddleGroup" gap="10">
+		<s:Scroller width="100%" height="100%">
+		<s:Group id="MainGroup" width="100%" height="100%" moveEffect="mv" >
+			<mx:ViewStack width="100%" height="100%" creationPolicy="all" id="vs">
+				<s:NavigatorContent width="100%" height="100%" label="New Deposit">
+					<deposit:Depostnew width="100%" height="100%" />					
+				</s:NavigatorContent>
+				<s:NavigatorContent width="100%" height="100%" label="Deposit Lists">
+					<deposit:Depositlist width="100%" height="100%" />
+				</s:NavigatorContent>
+				<s:NavigatorContent width="100%" height="100%" label="Reports">
+					<deposit:Reportlist width="100%" height="100%" />
+				</s:NavigatorContent>
+				<s:NavigatorContent width="100%" height="100%" label="Admin/Config">
+					<deposit:vUserList width="100%" height="100%"/>
+				</s:NavigatorContent>
+			</mx:ViewStack>
+		</s:Group>
+		</s:Scroller>
+	</s:HGroup>
+</s:Group>	
+</s:Group>

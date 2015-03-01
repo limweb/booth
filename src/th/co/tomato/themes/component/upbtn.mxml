@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		width="100%" height="100%">
+	<fx:Metadata>[HostComponent("spark.components.Button")]</fx:Metadata>
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="over"/>
+		<s:State name="down"/>
+		<s:State name="disabled"/>
+	</s:states>
+<!--	<s:Path x="1.371" y="1.178" width="32.208" height="26.642"
+			data="M 66.30 57.44 L 0.00 57.44 33.15 0.02 Z ">
+		<s:stroke>
+			<s:SolidColorStroke caps="none" joints="miter" miterLimit="4" weight="1"
+								color.disabled="#216289"
+								color.down="#216289"
+								color.over="#067DC6"
+								color.up="#009CFF"/>
+		</s:stroke>
+		<s:fill>
+			<s:SolidColor color.disabled="#CCCCCC"
+						  color.down="#216289"
+						  color.over="#067DC6"
+						  color.up="#009CFF"/>
+		</s:fill>
+	</s:Path>-->
+	<s:Rect top="0" left="0" right="0" bottom="0" >
+		<s:fill>
+			<s:SolidColor color.over="0x017CC2"
+						  color.down="0x017CC2"
+						  color.up="0x58BEE6"
+						  color.disabled="0xc6cdd2"
+						  />
+		</s:fill>
+	</s:Rect>
+	<s:RichText id="labelDisplay" color="#FFFFFF" 
+				tabStops="S0" whiteSpaceCollapse="preserve"
+				fontFamily="Verdana" fontSize="12" fontWeight="normal"
+				horizontalCenter="0" verticalCenter="0"/>
+</s:Skin>

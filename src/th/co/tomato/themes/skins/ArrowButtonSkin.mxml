@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	width="14" height="14"
+	alpha.disabled="0.5">
+	
+	<fx:Metadata>
+		[HostComponent("spark.components.ToggleButton")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import th.co.tomato.themes.FlatTheme;
+		]]>
+	</fx:Script>
+	<!-- states -->
+	<s:states>
+		<s:State name="up" />
+		<s:State name="over" stateGroups="overStates" />
+		<s:State name="down" stateGroups="downStates" />
+		<s:State name="disabled" stateGroups="disabledStates" />
+		<s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates" />
+		<s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
+		<s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
+		<s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates" />
+	</s:states>
+	
+	<!-- bg -->
+<!--	<s:Ellipse width="14" height="14">
+		<s:fill>
+			<s:SolidColor color="#ffffff" />
+		</s:fill>
+	</s:Ellipse>
+	<s:Ellipse x="1" y="1" width="12" height="12">
+		<s:fill>
+			<s:SolidColor color="#eeeeee" />
+		</s:fill>
+	</s:Ellipse>-->
+	
+	<!-- arrow right -->
+	<s:Path alpha="1" blendMode="normal" data="M 267 166 L 284 175 L 267 183" horizontalCenter="0"
+			includeIn="up,over,down,disabled"
+			verticalCenter="-1" winding="evenOdd"
+			width="6" height="6"
+			>
+		<s:stroke>
+			<s:SolidColorStroke color="{FlatTheme.upColor}" weight="2" caps="none"/>
+		</s:stroke>
+	</s:Path>
+<!--	<s:Path includeIn="up,over,down,disabled">
+		<s:data>M 5,3 L 10,7 5,11 Z</s:data>
+		<s:fill>
+			<s:SolidColor color="#ff2299" />
+		</s:fill>
+	</s:Path>-->
+	
+	<!-- arrow down -->
+	<s:Path alpha="1" blendMode="normal" data="M 284 166 L 276 183 L 267 166" winding="evenOdd"
+			verticalCenter="0" horizontalCenter="0" width="6" height="6"
+			includeIn="upAndSelected, overAndSelected, downAndSelected, disabledAndSelected"
+			>
+		<s:stroke>
+			<s:SolidColorStroke color="{FlatTheme.upColor}" weight="2" caps="none"/>
+		</s:stroke>
+	</s:Path>
+<!--	<s:Path includeIn="upAndSelected, overAndSelected, downAndSelected, disabledAndSelected">
+		<s:data>M 3,5 L 11,5 7,10 Z</s:data>
+		<s:fill>
+			<s:SolidColor color="#ff2299" />
+		</s:fill>
+	</s:Path>-->
+	
+</s:SparkSkin>

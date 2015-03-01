@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:component="th.co.tomato.themes.component.*"
+			   xmlns:login="th.co.tomato.login.*"
+			   xmlns:local="*"
+			   width="100%" height="100%" 
+			   minWidth="1366" minHeight="700"
+			   applicationComplete="appComplete()"
+			   creationComplete="init()" creationPolicy="all" initialize="appInit(event)"
+			   >
+				<fx:Style source="TVSCHEDULE.css"  />
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			
+			import th.co.tomato.event.ActiveSrvEvent;
+			import th.co.tomato.event.StatusEvent;
+			import th.co.tomato.main.MainConfig;
+			import th.co.tomato.themes.component.about;
+			
+			
+			protected function init():void
+			{
+				trace('init');
+				maximize();
+				systemManager.addEventListener(FlexEvent.IDLE, handleApplicationIdle);
+			}
+			
+			protected function appComplete():void
+			{
+				setTimeout(function():void {
+					mainVs.selectedChild  = vlogin ;
+				},0);
+				this.x = 0;this.y=0;
+			}
+			
+			protected function AboutUs(event:MouseEvent):void
+			{
+				if(event.ctrlKey){
+					var ab:about = new about();
+					ab = about(PopUpManager.createPopUp(this,about,true));
+				}
+			}
+			
+			private function handleApplicationIdle(event:FlexEvent):void
+			{
+				
+				if(event.currentTarget.mx_internal::idleCounter == 480*0.5 ){
+					if(mainVs.selectedIndex != 3 ){
+						mainVs.selectedIndex = 3;
+						vScreensave.ClearData();
+					}
+				}
+			}
+			
+			public function sessionTimeout():void {
+				if(mainVs.selectedIndex != 3 ){
+					mainVs.selectedIndex = 3;
+					vScreensave.ClearData();
+				}
+			}
+			
+			protected function appInit(event:FlexEvent):void
+			{
+				ActiveSrvEvent.getInstance.getActive(null);
+				ActiveSrvEvent.getInstance.getActiveAll(null);
+				th.co.tomato.event.StatusEvent.getInstance.getStatus(null);
+				th.co.tomato.event.StatusEvent.getInstance.getStatusAll(null);
+			}
+			
+			
+			public function gotoMain():void
+			{
+				mainVs.selectedChild = vmain;
+				viewMain.initMain();
+				viewLogin.txtpass.text = '';
+				viewLogin.txtuser.text = '';
+			}
+			
+			public function logout():void {
+				mainVs.selectedChild = vlogin;
+			}
+			
+			
+			
+//			protected function getAllSeriestype(userid:String):void
+//			{
+//				getAllSeriesType.token = seriestypeService.getAll(userid);
+//			}
+//			
+//			protected function getAllResult_resultHandler(event:ResultEvent):void
+//			{
+//				MainConfig.getInstance.acSeriesType = event.result as ArrayCollection;
+//				if(MainConfig.getInstance.acSeriesType == null ) MainConfig.getInstance.acSeriesType = new ArrayCollection();
+//			}
+//			
+//			
+//			protected function getAllMovietype(userid:String):void
+//			{
+//				getAllMovieType.token = movietypeService.getAll(userid);
+//			}
+//			
+//			protected function getAllMovieType_resultHandler(event:ResultEvent):void
+//			{
+//				MainConfig.getInstance.acMoveType = event.result as ArrayCollection;
+//				if(MainConfig.getInstance.acMoveType == null ) MainConfig.getInstance.acMoveType = new ArrayCollection();
+//			}
+//			
+//			
+//			protected function countspNotification():void
+//			{
+//				countspNotificationResult.token = userService.countspNotification();
+//			}
+//			
+//			protected function countspNotificationResult_resultHandler(event:ResultEvent):void
+//			{
+//				
+//					MyClass.instance.notificeCount = event.result as int;		
+//					if(MainConfig.getInstance.userModel.Rolls('AD','LIST') && MyClass.instance.notificeCount > 0 ){
+//						viewMain.btnNotifi.visible = true;
+//					}
+//					
+//			}
+
+			protected function vScreensave_clickHandler(event:MouseEvent):void
+			{
+				mainVs.selectedIndex=1;
+				viewMain.initMain();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+	</fx:Declarations>
+	<s:Scroller x="0" y="0" width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto" id="mainScroller">
+		<s:Group id="mainG" left="0" right="0" top="0" bottom="0" >
+				<mx:ViewStack width="100%" height="100%" id="mainVs" creationPolicy="all" minHeight="500" minWidth="960" >
+					<s:NavigatorContent width="100%" height="100%" label="viewLogin" creationPolicy="all" id="vlogin">
+						<login:vLogin horizontalCenter="0" verticalCenter="0" id="viewLogin" />
+					</s:NavigatorContent>
+					<s:NavigatorContent width="100%" height="100%" label="viewMain" creationPolicy="all" id="vmain">
+						<local:vMain horizontalCenter="0" verticalCenter="0" width="100%" height="100%"  id="viewMain"/>
+					</s:NavigatorContent>
+					<s:NavigatorContent width="100%" height="100%" label="viewMain" creationPolicy="all">
+							
+					</s:NavigatorContent>
+					<s:NavigatorContent width="100%" height="100%" label="viewScreen" creationPolicy="all" id="vscreen">
+							<component:vScreenSaver   id="vScreensave" click="vScreensave_clickHandler(event)"/>
+					</s:NavigatorContent>
+					<s:NavigatorContent width="100%" height="100%" label="welcome" creationPolicy="all" id="vwel">
+						<mx:Text id="txt1" click="mainVs.selectedIndex = 1;" horizontalCenter="1"
+							 text="Welcome to ...."
+							 verticalCenter="171"/>
+						<s:Image horizontalCenter="0" source="assets/images/splash/splash-bg.png"
+							 verticalCenter="0"/>
+	
+				</s:NavigatorContent>
+			</mx:ViewStack>
+			<s:Group left="0" top="0" width="79" height="84" doubleClick="AboutUs(event)"
+					 doubleClickEnabled="true">
+			</s:Group>
+		</s:Group>
+	</s:Scroller>
+</s:WindowedApplication>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Ofir Shemesh - http://shemesh.wordpress.com
+BMC Software, 2008
+-->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	focusEnabled="true" horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	borderStyle="solid" height="22" backgroundColor="#FFFFFF"
+	creationComplete="onCreationComplete()">
+	
+	<mx:Button id="upButton" autoRepeat="true"
+		height="10" width="20" cornerRadius="0"
+		x="{hbox.width}" y="0"
+		tabEnabled="false" focusEnabled="false" focusAlpha="0"
+		icon="th.co.tomato.themes.shemesh.icons.UpArrow"
+		buttonDown="onUpButton()"/>
+	<mx:Button id="downButton" autoRepeat="true"
+		height="10" width="20" cornerRadius="0"
+		x="{hbox.width}" y="10"
+		tabEnabled="false" focusEnabled="false" focusAlpha="0"
+		icon="th.co.tomato.themes.shemesh.icons.DownArrow"
+		buttonDown="onDownButton()" />
+		
+	<mx:Metadata>
+        [Event(name="valueChanged", type="MultiStepperEvent")]
+    </mx:Metadata>
+    
+	<mx:Script>
+		<![CDATA[
+			import th.co.tomato.themes.shemesh.events.MultiStepperEvent;
+		
+			import mx.events.FlexEvent;
+			import mx.controls.Label;
+			import mx.containers.HBox;
+			
+			//number of desired inputs for the multi stepper.
+			[Bindable] public var numInputs:int = 1;
+			
+			//array of MultiStepperInputs, holding each of the input fields from inside the MultiStepper.
+			[Bindable] public var inputs:Array;
+			
+			// array of numbers, each representing the maximum allowed value for its corresponding field.
+			[Bindable] public var maximumPerInput:Array = new Array();
+			
+			// array of numbers, each representing the minimum allowed value for its corresponding field.
+			[Bindable] public var minimumPerInput:Array = new Array();
+			
+			//array of numbers, each representing the step-size for its corresponding field.
+			[Bindable] public var stepSizePerInput:Array = new Array();
+			
+			//array of numbers, holding the current values for each of the fields.
+			[Bindable] public var valuePerInput:Array = new Array();
+			
+			[Bindable] private var hbox:HBox;
+			private var focusedInput:MultiStepperInput;
+			
+			override protected function createChildren():void{
+				super.createChildren();
+				
+				hbox = new HBox();
+				hbox.horizontalScrollPolicy = "off";
+				hbox.verticalScrollPolicy = "off";
+				hbox.setStyle("verticalAlign" ,"center");
+				hbox.setStyle("horizontalGap" ,-7);
+				this.addChild(hbox);
+				
+				inputs = new Array();
+				for (var i:int ; i < numInputs ; i ++){
+					var newInput:MultiStepperInput = new MultiStepperInput;
+					newInput.text = String((valuePerInput[i] == undefined)?0:valuePerInput[i]);
+					
+					var dataObj:Object = new Object();
+					dataObj.maximum = (maximumPerInput[i] == undefined)?10:maximumPerInput[i];
+					dataObj.minimum = (minimumPerInput[i] == undefined)?0:minimumPerInput[i];
+					dataObj.stepSize = (stepSizePerInput[i] == undefined)?1:stepSizePerInput[i];
+					dataObj.location = i;
+					newInput.data = dataObj;
+					
+					newInput.addEventListener(FocusEvent.FOCUS_IN ,onInputFocusIn);
+					newInput.addEventListener(KeyboardEvent.KEY_DOWN ,onInputKeyDown);
+					
+					inputs.push(newInput);
+					hbox.addChild(newInput);
+			
+					
+					if(i < numInputs-1){
+						var seperator:Label = new Label();
+						seperator.width = 8;
+						seperator.text = ":";
+						hbox.addChild(seperator);
+					}
+				}
+			}
+			
+			private function onCreationComplete():void {
+				focusedInput = inputs[0];
+			}
+			
+			private function onUpButton():void {
+				changeFocus();
+				if(Number(focusedInput.text) < focusedInput.data.maximum){
+					focusedInput.text = String(Number(focusedInput.text) + focusedInput.data.stepSize);
+					onInputValueCommit()
+				}
+			}
+			
+			private function onDownButton():void {
+				changeFocus();
+				if(Number(focusedInput.text) > focusedInput.data.minimum){
+					focusedInput.text = String(Number(focusedInput.text) - focusedInput.data.stepSize);
+					onInputValueCommit()
+				}
+			}
+			
+			private function onInputValueCommit():void {
+				var oldValues:Array = cloneArray(valuePerInput);
+				valuePerInput[focusedInput.data.location] = Number(focusedInput.text);
+				dispatchEvent(new MultiStepperEvent(MultiStepperEvent.VALUE_CHANGED, oldValues, valuePerInput, focusedInput.data.location));
+			}
+			
+			private function changeFocus():void {
+            	focusedInput.setFocus();
+            	focusedInput.setSelection(0,0);
+            }
+			
+			private function onInputFocusIn(event:FocusEvent):void {
+				this.drawFocus(true);
+				focusedInput = event.currentTarget as MultiStepperInput;
+			}
+            
+            private function onInputKeyDown(event:KeyboardEvent):void{
+            	if(event.keyCode == 39 || event.keyCode == 38){
+            		upButton.dispatchEvent(new FlexEvent(FlexEvent.BUTTON_DOWN));
+            	}
+            	else if(event.keyCode == 37 || event.keyCode == 40){
+            		downButton.dispatchEvent(new FlexEvent(FlexEvent.BUTTON_DOWN));
+            	}
+            }
+            
+            private function cloneArray(source:Array):Array {
+            	var a:Array = new Array;
+            	for(var i:int = 0 ; i < source.length ; i ++){
+            		a.push(source[i]);
+            	}
+            	return a;
+            }
+		]]>
+	</mx:Script>	
+</mx:Canvas>

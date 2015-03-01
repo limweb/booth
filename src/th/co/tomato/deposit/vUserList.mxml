@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:usersservice="services.usersservice.*"
+		 width="100%" height="100%" creationComplete="init(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			
+			import th.co.tomato.main.MainConfig;
+			import th.co.tomato.utils.MessageAlert;
+			
+			[Bindable]
+			private var acuser:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			private var edituser:Edituser;
+			
+			public function resetDefaultPass(usr:String, userid:String):void
+			{
+				MessageAlert.getConfirmAlertListener('Are you sure want to Reset Password for this User ? ',function(e:CloseEvent):void {
+					if(e.detail == Alert.YES){
+						edituser = PopUpManager.createPopUp(this.parent,Edituser,true) as Edituser;
+						edituser.p = this;
+						edituser.u = dgUser.selectedItem;
+						PopUpManager.centerPopUp(edituser);
+					}
+				});
+				
+			}
+			
+			private function deleteUserbyId(userid:String):void {
+				//				UserServiceEvent.instance.delByID(userid,this);
+			}
+			
+			
+			public function delByID(usrid:Object, userid:String):void
+			{
+				MessageAlert.getConfirmAlertListener('Are you sure want to delete this User ? ',function(e:CloseEvent):void {
+					if(e.detail == Alert.YES){
+						deleteUserbyId(userid);
+					}
+				});
+			}
+			
+			public function delByIDResult_resultHandler():void
+			{
+				MessageAlert.getSuccessAlert('Delete User Success');	
+				getusers();
+			}
+			
+			public function viewlog(userid:String):void {
+				//				MainConfig.getInstance.showProgressBar();
+				//				UserServiceEvent.instance.getsystemlogbyuser(userid,AdminModul.getInstance.vAD as Object);
+			}
+			
+			protected function init(event:FlexEvent):void
+			{
+				getusers();
+			}
+			
+			
+			public function getusers():void
+			{
+				getusersResult.token = usersService.getusers();
+			}
+			
+			protected function getusersResult_resultHandler(event:ResultEvent):void
+			{
+				acuser = event.result as ArrayCollection;
+				acuser.refresh();
+			}
+			
+			[Bindable] private var newuserpop:Newuser;
+			protected function Addnewuser(event:MouseEvent):void
+			{
+				newuserpop = PopUpManager.createPopUp(this,Newuser,true) as Newuser;
+				newuserpop.p = this;
+				PopUpManager.centerPopUp(newuserpop);
+				
+			}
+			
+			
+			protected function deluser(id:Object):void
+			{
+				deluserResult.token = usersService.deluser(id);
+			}
+			
+			
+			protected function getuserbyid(id:Object):void
+			{
+				getuserbyidResult.token = usersService.getuserbyid(id);
+			}
+			
+			
+			protected function register(user:Object):void
+			{
+				registerResult.token = usersService.register(user);
+			}
+			
+			
+			protected function updateuser(user:Object):void
+			{
+				updateuserResult.token = usersService.updateuser(user);
+			}
+			
+			protected function edituse(event:MouseEvent):void
+			{
+				edituser = PopUpManager.createPopUp(this,Edituser,true) as Edituser;
+				edituser.p = this;
+				edituser.u = dgUser.selectedItem;
+				edituser.init();
+				PopUpManager.centerPopUp(edituser);
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:CallResponder id="getusersResult" result="getusersResult_resultHandler(event)"/>
+		<usersservice:UsersService id="usersService"
+								   fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+								   showBusyCursor="true"/>
+		<s:CallResponder id="deluserResult"/>
+		<s:CallResponder id="getuserbyidResult"/>
+		<s:CallResponder id="registerResult"/>
+		<s:CallResponder id="updateuserResult"/>
+	</fx:Declarations>
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="left" gap="0" paddingRight="10" paddingLeft="10"  paddingBottom="10"/>
+	</s:layout>
+	<s:HGroup width="100%" height="41" verticalAlign="middle">
+		<s:Button label="Add New User" id="btnNewUser" click="Addnewuser(event)"/>
+	</s:HGroup>
+	<s:HGroup width="100%" horizontalAlign="right" gap="0" verticalAlign="middle" >
+	</s:HGroup>
+	<s:HGroup width="100%" verticalAlign="middle" >
+		<s:Spacer width="100%" />
+	</s:HGroup>
+	<mx:AdvancedDataGrid width="100%" height="100%" id="dgUser" 
+						 dataProvider="{acuser}"
+						 doubleClickEnabled="true"
+						 doubleClick="edituse(event)"
+						 variableRowHeight="true">
+						<mx:columns>
+							<mx:AdvancedDataGridColumn dataField="id" headerText="UserName" width="100"/>
+							<mx:AdvancedDataGridColumn dataField="username" headerText="UserName"/>
+							<mx:AdvancedDataGridColumn dataField="role" editable="true" editorDataField="value" width="200"
+													   headerText="Role" rendererIsEditor="true"/>
+							<mx:AdvancedDataGridColumn dataField="status" textAlign="center" headerText="Status" itemRenderer="th.co.tomato.deposit.lblitemrenderer" width="100" />
+<!--							<mx:AdvancedDataGridColumn dataField="status" headerText="Action" width="100" >
+								<mx:itemRenderer>
+									<fx:Component>
+										<mx:HBox horizontalAlign="center" verticalAlign="middle">
+											<fx:Script>
+											<![CDATA[
+												import th.co.tomato.main.MainConfig;
+											]]>
+											</fx:Script>
+											<s:Button label="Reset Password"
+													  click="outerDocument.resetDefaultPass(MainConfig.getInstance.userModel.userid,data.userid);"/>
+											<s:Button visible="{(data.userid != 'admin')}" label="Del User"
+													  click="outerDocument.delByID(MainConfig.getInstance.userModel.userid,data.userid);"/>
+											<s:Button label="Log" click="outerDocument.viewlog(data.userid)" />
+										</mx:HBox>
+									</fx:Component>
+								</mx:itemRenderer>
+							</mx:AdvancedDataGridColumn>-->
+						</mx:columns>
+		
+		
+	</mx:AdvancedDataGrid>
+	<s:HGroup  width="100%"  horizontalAlign="right" verticalAlign="top">
+		<!--	<mx:Text text="Total:{AdminModul.getInstance.acUser.length}" width="{colLog.width+10}"/>-->
+	</s:HGroup>
+	
+</s:Group>

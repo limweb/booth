@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+				width="169" height="29" autoDrawBackground="false" xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Script>
+		<![CDATA[
+			import th.co.tomato.themes.FlatTheme;
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
+	</s:states>
+	<s:Group id="itemGroup" top="0" left="0" right="0" bottom="0" >
+		
+	<s:Rect x="0" y="0" width="169" height="29">
+		<s:fill>
+			<s:SolidColor color.hovered="{FlatTheme.upColor}"
+						  color.normal="0xFFFFFF"
+						  color.selected="{FlatTheme.selectColor}"/>
+		</s:fill>
+	</s:Rect>
+	<s:RichText left="14" right="95" top="7" bottom="10" 
+				color.normal="{FlatTheme.txtColor}" color.hovered="{FlatTheme.txthoverColor}" color.selected="{FlatTheme.txtselectColor}" 
+				fontSize="12" tabStops="S0 S50 S100" text="{data}"/>
+	</s:Group>
+</s:ItemRenderer>

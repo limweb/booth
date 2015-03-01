@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 height="50"
+		 toolTip="{t1+':'+t2}"
+		 click="showdetailClick(event)" xmlns:mx="library://ns.adobe.com/flex/mx"
+		>
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			
+			[Bindable]
+			public var t1:String = 'aaaa';
+			
+			[Bindable]
+			public var t2:String = 'bbbb';
+
+			[Bindable]
+			public var t3:String = '11:00:00 (0:40)' ;
+			
+			
+			protected function showdetailClick(event:MouseEvent):void
+			{
+				Alert.show(t2 + " \r " +t3,t1);
+			}
+			
+			private var redBias:Number = 0xFF;
+			private var greenBias:Number = 0xFF;
+			private var blueBias:Number = 0xFF;
+			
+			private function getRandomColor():uint{
+				var ct:ColorTransform = new ColorTransform(1,1,1,1,Math.random()*redBias, Math.random()*greenBias, Math.random()*blueBias);
+				var color:uint = ct.color;
+				return color;
+			}
+			
+		]]>
+	</fx:Script>
+	<s:Rect left="0.5" right="0.5" top="0.5" bottom="0.5">
+			<s:fill>
+				<s:SolidColor color="0x00B6DE" id="sstroke" />
+			</s:fill>
+		<s:stroke>
+			<s:SolidColorStroke caps="none" color="#000000" joints="miter" miterLimit="4" 
+								weight="0.5"/>
+		</s:stroke>
+<!--		<s:filters>
+			<s:DropShadowFilter alpha="0.5" angle="45.0" blurX="4.0" blurY="4.0" color="#000000"
+								distance="4.0" hideObject="false" inner="false" knockout="false"
+								quality="2" strength="1"/>
+			<s:BevelFilter angle="45.0" blurX="4.0" blurY="4.0" distance="4.0" highlightAlpha="1.0"
+						   highlightColor="#FFFFFF" knockout="false" quality="2" shadowAlpha="1.0"
+						   shadowColor="#000000" strength="1" type="inner"/>
+		</s:filters>-->
+	</s:Rect>
+	<mx:VBox left="5" width="98%" paddingTop="5" bottom="2" verticalGap="2">
+	<s:RichText left="5" color="#FFFFFF" fontFamily="MyFontCFF" fontSize="16" tabStops="S0 S50"
+				text="{t1}" verticalCenter="-13"/>
+	<s:RichText left="7" color="#FFFFFF" fontFamily="MyFontCFF" fontSize="12" tabStops="S0 S50"
+				text="{t2}" verticalCenter="3"/>
+	<s:RichText left="7" color="#FFFFFF" fontFamily="MyFontCFF" fontSize="12" fontStyle="italic"
+				tabStops="S0 S50" text="{t3}" verticalCenter="17"/>
+	</mx:VBox>
+</s:Group>

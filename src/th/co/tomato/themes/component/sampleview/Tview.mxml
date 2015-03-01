@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:MainClass="th.co.tomato.themes.component.MainClass.*"
+		 minWidth="500" minHeight="500" 
+		 >
+	<fx:Script>
+		<![CDATA[
+			import th.co.tomato.themes.FlatTheme;
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Rect top="0" left="0" right="0" bottom="0" >
+		<s:fill>
+			<s:SolidColor color="0xFFFFFF" />
+		</s:fill>
+		<s:stroke>
+			<s:SolidColorStroke color="{FlatTheme.upColor}"  weight="1"/>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:Group top="0.5" left="0.5" right="0.5" bottom="0.5" >
+		<s:layout>
+			<s:VerticalLayout gap="0" />
+		</s:layout>
+		<s:Group width="100%" height="50">
+		<s:Rect top="0" left="0" right="0" bottom="0" >
+			<s:fill>
+				<s:SolidColor color="{FlatTheme.upColor}" />
+			</s:fill>
+		</s:Rect>
+		<s:HGroup width="100%" height="50" textAlign="right" horizontalAlign="right" verticalAlign="middle" paddingRight="5" paddingLeft="5">
+			<MainClass:TwostateBtn skinClass="th.co.tomato.themes.component.twostatebtn.TwoStateBtnSkin" label="A" id="two2" />
+			<s:Button label="A" skinClass="th.co.tomato.themes.component.QuadrateIconBtn.QuadrateIconBtnSkin"  />
+			<s:Button label="B" skinClass="th.co.tomato.themes.component.RotateBtn.RotateBtnSkin" height="30" width="30" />
+			<s:ToggleButton skinClass="th.co.tomato.themes.component.ToggleButtonBtn.ToggleButtonIconSkin" id="twoBtn"  label="A"/>	  
+			<s:ComboBox x="540" y="114" labelField="name"
+						skinClass="th.co.tomato.themes.component.Combobox.FlatComboboxskin"/>
+		</s:HGroup>	
+		</s:Group>
+		<s:Group width="100%" height="100%" id="MainG">
+			<s:Button x="76" y="49" label="Button"/>
+			<s:CheckBox x="76" y="88" label="CheckBox"/>
+			<mx:ColorPicker x="76" y="123"/>
+			<mx:DateChooser x="76" y="188" width="264" height="178"/>
+			<mx:DateField x="202" y="49"/>
+		</s:Group>
+	</s:Group>
+	
+</s:Group>

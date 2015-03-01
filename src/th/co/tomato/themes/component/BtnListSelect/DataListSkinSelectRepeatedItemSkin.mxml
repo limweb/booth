@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+				width="100%" height="30" 
+				minHeight="30" 
+				autoDrawBackground="false">
+	<fx:Script>
+		<![CDATA[
+			import th.co.tomato.themes.FlatTheme;
+			
+			[Bindable] private var bgColor:uint = 0xFFFFFF;
+			override public function set itemIndex(value:int):void
+			{
+				super.itemIndex = value;
+
+			}
+			
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
+	</s:states>
+	<s:Group x="1" y="1" width="100%" height="100%" id="ItemGroup" >
+		<s:Rect x="0.5" y="0.5" width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="{bgColor}"
+							  color.hovered="{FlatTheme.upColor}"
+							  color.selected="{FlatTheme.upColor}"/>
+			</s:fill>
+		</s:Rect>
+		<s:HGroup width="100%" verticalAlign="middle" height="100%" gap="5" paddingLeft="10" >
+		<s:RichText fontFamily="myiconfont" fontSize="12"
+					tabStops="S0 S50 S100" text="{data.text1}" 
+					color.normal="0x000000" color.hovered="{FlatTheme.txtoverColor}" color.selected="{FlatTheme.txtoverColor}" 
+					/>
+		<s:RichText color.normal="0x000000" color.hovered="{FlatTheme.txtoverColor}" color.selected="{FlatTheme.txtoverColor}" 
+					fontFamily="Arial" fontSize="12"
+					tabStops="S0 S50 S100" text="{data.text2}"
+					/>
+		</s:HGroup>
+	</s:Group>
+
+</s:ItemRenderer>
